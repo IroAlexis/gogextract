@@ -1,8 +1,11 @@
 # GOG Extract
 
+The [project] is developped by @Yepoleb.
 Script for unpacking GOG Linux installers.
 
-Explanation of how it works is in my [blog post].
+Explanation of how it works is in his [blog post].
+
+I'm rewriting it in the C language with the objective of not having memory leaks
 
 ## Usage
 
@@ -12,6 +15,7 @@ Output files will be named `unpacker.sh`, `mojosetup.tar.gz` and `data.zip`.
 
 ## License
 
-[MIT](LICENSE)
+Available in [LICENSE](LICENSE) file
 
 [blog post]: https://yepoleb.github.io/blog/2016/10/09/how-the-gog-linux-installers-work/
+[project]: https://github.com/Yepoleb/gogextract
