@@ -7,9 +7,13 @@ Explanation of how it works is in his [blog post].
 
 I'm rewriting it in the C language with the objective of not having memory leaks
 
+## Building
+
+`gcc -Wall -Wextra -pedantic -o gogunpack gogunpack.c`
+
 ## Usage
 
-`gogextract.py <input file> <output dir>`
+Not available for moment but you have always the initial project : `legacy/gogextract.py <input file> <output dir>`
 
 Output files will be named `unpacker.sh`, `mojosetup.tar.gz` and `data.zip`.
 
