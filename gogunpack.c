@@ -124,6 +124,27 @@ char* get_name_game(const char* path)
 }
 
 
+long get_file_size(const char* path)
+{
+	FILE* stream;
+	long  size;
+	
+	size = -1;
+	
+	stream = fopen (path, "r");
+	if (NULL != stream)
+	{
+		// Go to end
+		fseek(stream, 0, SEEK_END);
+		size = ftell(stream);
+		
+		fclose(stream);
+	}
+	
+	return size;
+}
+
+
 int main(int argc, char* argv[])
 {
 	// It is just a test for the moment
@@ -139,10 +160,10 @@ int main(int argc, char* argv[])
 	
 	free(file);
 	
-	f_size = get_const(argv[1], FILESIZES, strlen(FILESIZES));
-	printf("%d\n", f_size);
 	o_size = get_const (argv[1], OFFSET, strlen(OFFSET));
-	printf("%d\n", o_size);
+	printf("script_lines: %d\n", o_size);
+	f_size = get_const(argv[1], FILESIZES, strlen(FILESIZES));
+	printf("MojoSetup archive size: %d\n", f_size);
 	
 	return EXIT_SUCCESS;
 }
