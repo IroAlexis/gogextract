@@ -3,61 +3,144 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <ctype.h>
+//#include <syslog.h>
 
-// Unable to open a file
-#define ERR_FILE -1
+#define NAME_DIR "game"
+#define MODE_DIR 0755
 #define BUFFER 512
 
-#define STR_FILESIZES "filesizes="
-#define F_COUNT 11 // <-----'
-#define STR_OFFSET "offset=`head -n "
-#define O_COUNT 16 // <------'
+#define ERR_FILE -1
 
-int get_const(const char* path, const char* str, const int count)
+#define FILESIZES "filesizes=\""
+#define OFFSET    "offset=`head -n "
+#define LABEL     "label=\""
+#define TAG       " (GOG.com)\"\n"
+
+
+int get_const(const char* path, const char* str, const int size)
 {
-	FILE*  stream;
-	int    res;
 	int    value;
 	char   line[BUFFER];
 	char*  occ;
+	FILE*  stream;
 	
 	
-	stream = fopen (path, "r");
-	if (NULL == stream)
-		return ERR_FILE;
-	
-	value = ERR_FILE;
-	
-	// Read the file line by line
-	while (fgets(line, sizeof(line), stream) != NULL)
+	stream = fopen(path, "r");
+	if (NULL != stream)
 	{
-		// Find the first occurence
-		occ = strstr(line, str);
-		if (NULL != occ)
+		value = ERR_FILE;
+		
+		// Read the file line by line
+		while (fgets(line, sizeof(line), stream) != NULL)
 		{
-			// Convert string into integer
-			res = sscanf(&occ[count], "%d", &value);
-			if (res != 1)
-				fprintf(stderr, "=> Not integer in the string\n");
-			
-			// Needn't to be continue
-			break;
+			// Find the first occurence
+			occ = strstr(line, str);
+			if (NULL != occ)
+			{
+				// Convert string into integer
+				if (sscanf(&occ[size], "%d", &value) != 1)
+					fprintf(stderr, "=> Not integer in the string\n");
+				
+				// Needn't to be continue
+				break;
+			}
 		}
+		
+		fclose(stream);
 	}
-	
-	fclose(stream);
-	
 	
 	return value;
 }
 
+
+char* format_string(char* str, const char ch)
+{
+	unsigned long ix;
+	
+	for (ix = 0 ; ix < strlen(str) ; ix++)
+	{
+		if (0 != isupper(str[ix]))
+			str[ix] = tolower(str[ix]);
+		
+		if (ch != ' ' && str[ix] == ' ')
+			str[ix] = ch;
+	}
+	
+	return str;
+}
+
+
+char* get_name_game(const char* path)
+{
+	unsigned long size;
+	unsigned long l_tmp;
+	unsigned long l_occ;
+	unsigned long l_tag;
+	char          line[BUFFER];
+	char          tmp[BUFFER];
+	char*         value;
+	char*         occ;
+	FILE*         stream;
+	
+	
+	l_occ = strnlen(LABEL, sizeof(LABEL));
+	l_tag = strnlen(TAG, sizeof(TAG));
+	value = NULL;
+	
+	stream = fopen(path, "r");
+	if (NULL != stream)
+	{
+		// Read the file line by line
+		while (fgets(line, sizeof(line), stream) != NULL)
+		{
+			// Find the first occurence
+			occ = strstr(line, LABEL);
+			if (NULL != occ)
+			{
+				//syslog(LOG_INFO, "gogunpack:: %s", occ);
+				strncpy(tmp, &occ[l_occ], sizeof(tmp));
+				
+				// Needn't to be continue
+				break;
+			}
+		}
+		fclose(stream);
+		
+		
+		// Require format the string correctly
+		l_tmp = strnlen(tmp, sizeof(tmp));
+		size = l_tmp - l_tag;
+		
+		value = (char*) calloc(size + 1, sizeof(char));
+		if (NULL != value)
+		{
+			value = strncpy(value, tmp, size);
+			value[size] = '\0';
+		}
+	}
+	
+	return value;
+}
+
+
 int main(int argc, char* argv[])
 {
+	// It is just a test for the moment
 	int res;
+	char* file = NULL;
 	
-	res = get_const(argv[1], STR_FILESIZES, F_COUNT);
+	file = get_name_game (argv[1]);
+	file = format_string(file, '-');
+	printf("%s\n", file);
+	
+	mkdir (file, MODE_DIR);
+	
+	free(file);
+	
+	res = get_const(argv[1], FILESIZES, strlen(FILESIZES));
 	printf("%d\n", res);
-	res = get_const (argv[1], STR_OFFSET, O_COUNT);
+	res = get_const (argv[1], OFFSET, strlen(OFFSET));
 	printf("%d\n", res);
 	
 	return EXIT_SUCCESS;
