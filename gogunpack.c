@@ -20,7 +20,7 @@
 
 int get_const(const char* path, const char* str, const int size)
 {
-	int    value;
+	int    rslt;
 	char   line[BUFFER];
 	char*  occ;
 	FILE*  stream;
@@ -29,7 +29,7 @@ int get_const(const char* path, const char* str, const int size)
 	stream = fopen(path, "r");
 	if (NULL != stream)
 	{
-		value = ERR_FILE;
+		rslt = ERR_FILE;
 		
 		// Read the file line by line
 		while (fgets(line, sizeof(line), stream) != NULL)
@@ -39,7 +39,7 @@ int get_const(const char* path, const char* str, const int size)
 			if (NULL != occ)
 			{
 				// Convert string into integer
-				if (sscanf(&occ[size], "%d", &value) != 1)
+				if (sscanf(&occ[size], "%d", &rslt) != 1)
 					fprintf(stderr, "=> Not integer in the string\n");
 				
 				// Needn't to be continue
@@ -50,7 +50,7 @@ int get_const(const char* path, const char* str, const int size)
 		fclose(stream);
 	}
 	
-	return value;
+	return rslt;
 }
 
 
@@ -73,20 +73,20 @@ char* format_string(char* str, const char ch)
 
 char* get_name_game(const char* path)
 {
-	unsigned long size;
-	unsigned long l_tmp;
-	unsigned long l_occ;
-	unsigned long l_tag;
-	char          line[BUFFER];
-	char          tmp[BUFFER];
-	char*         value;
-	char*         occ;
+	char*         rslt;
 	FILE*         stream;
+	char          line[BUFFER];
+	char*         occ;
+	unsigned long l_occ;
+	char          tmp[BUFFER];
+	unsigned long l_tmp;
+	unsigned long l_tag;
+	unsigned long size;
 	
 	
 	l_occ = strnlen(LABEL, sizeof(LABEL));
 	l_tag = strnlen(TAG, sizeof(TAG));
-	value = NULL;
+	rslt = NULL;
 	
 	stream = fopen(path, "r");
 	if (NULL != stream)
@@ -112,22 +112,23 @@ char* get_name_game(const char* path)
 		l_tmp = strnlen(tmp, sizeof(tmp));
 		size = l_tmp - l_tag;
 		
-		value = (char*) calloc(size + 1, sizeof(char));
-		if (NULL != value)
+		rslt = (char*) calloc(size + 1, sizeof(char));
+		if (NULL != rslt)
 		{
-			value = strncpy(value, tmp, size);
-			value[size] = '\0';
+			rslt = strncpy(rslt, tmp, size);
+			rslt[size] = '\0';
 		}
 	}
 	
-	return value;
+	return rslt;
 }
 
 
 int main(int argc, char* argv[])
 {
 	// It is just a test for the moment
-	int res;
+	int f_size;
+	int o_size;
 	char* file = NULL;
 	
 	file = get_name_game (argv[1]);
@@ -138,10 +139,10 @@ int main(int argc, char* argv[])
 	
 	free(file);
 	
-	res = get_const(argv[1], FILESIZES, strlen(FILESIZES));
-	printf("%d\n", res);
-	res = get_const (argv[1], OFFSET, strlen(OFFSET));
-	printf("%d\n", res);
+	f_size = get_const(argv[1], FILESIZES, strlen(FILESIZES));
+	printf("%d\n", f_size);
+	o_size = get_const (argv[1], OFFSET, strlen(OFFSET));
+	printf("%d\n", o_size);
 	
 	return EXIT_SUCCESS;
 }
