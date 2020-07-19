@@ -14,6 +14,7 @@
 
 #define FILESIZES "filesizes=\""
 #define OFFSET    "offset=`head -n "
+#define END_SCRIPT "eval $finish; exit $res\n"
 #define LABEL     "label=\""
 #define TAG       " (GOG.com)\"\n"
 
@@ -126,12 +127,12 @@ char* get_name_game(const char* path)
 
 long get_file_size(const char* path)
 {
-	FILE* stream;
-	long  size;
+	FILE*   stream;
+	long    size;
 	
 	size = -1;
 	
-	stream = fopen (path, "r");
+	stream = fopen (path, "rb");
 	if (NULL != stream)
 	{
 		// Go to end
@@ -145,11 +146,42 @@ long get_file_size(const char* path)
 }
 
 
+// Not functional
+void extract_script(const char* src, const char* dest, const long max)
+{
+	FILE*  s_stream;
+	FILE*  d_stream;
+	char   line[1];
+	size_t nb;
+	
+	s_stream = fopen(src, "rb");
+	if (NULL != s_stream)
+	{
+		d_stream = fopen(dest, "wb");
+		if (NULL != d_stream)
+		{
+			while (fgets(line, sizeof(line), s_stream) != NULL)
+			{
+				if (ftell(s_stream) <= max)
+				{
+					//fwrite(line, 1, nb, d_stream);
+					printf("%s\n", line);
+				}
+			}
+			
+			fclose(d_stream);
+			fclose(s_stream);
+		}
+	}
+}
+
+
 int main(int argc, char* argv[])
 {
 	// It is just a test for the moment
-	int f_size;
-	int o_size;
+	int   f_size;
+	int   o_size;
+	long  s_size;
 	char* file = NULL;
 	
 	file = get_name_game (argv[1]);
@@ -164,6 +196,10 @@ int main(int argc, char* argv[])
 	printf("script_lines: %d\n", o_size);
 	f_size = get_const(argv[1], FILESIZES, strlen(FILESIZES));
 	printf("MojoSetup archive size: %d\n", f_size);
+	
+	s_size = get_file_size(argv[1]);
+	printf("Makeself script size: %ld\n", s_size);
+	extract_script(argv[1], "./unpacker.sh", s_size);
 	
 	return EXIT_SUCCESS;
 }
