@@ -14,7 +14,6 @@
 
 #define FILESIZES "filesizes=\""
 #define OFFSET    "offset=`head -n "
-#define END_SCRIPT "eval $finish; exit $res\n"
 #define LABEL     "label=\""
 #define TAG       " (GOG.com)\"\n"
 
