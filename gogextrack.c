@@ -8,7 +8,7 @@
 
 #define NAME_DIR "game"
 #define MODE_DIR 0755
-#define BUFFER 512
+#define BUFFER   512
 
 #define ERR_FILE -1
 
@@ -20,10 +20,10 @@
 
 int get_const(const char* path, const char* str, const int size)
 {
-	int    rslt;
-	char   line[BUFFER];
-	char*  occ;
-	FILE*  stream;
+	int   rslt;
+	char  line[BUFFER];
+	char* occ;
+	FILE* stream;
 	
 	
 	stream = fopen(path, "r");
@@ -126,8 +126,8 @@ char* get_name_game(const char* path)
 
 long get_file_size(const char* path)
 {
-	FILE*   stream;
-	long    size;
+	FILE* stream;
+	long  size;
 	
 	size = -1;
 	
@@ -198,7 +198,7 @@ int main(int argc, char* argv[])
 	
 	s_size = get_file_size(argv[1]);
 	printf("Makeself script size: %ld\n", s_size);
-	extract_script(argv[1], "./unpacker.sh", s_size);
+	//extract_script(argv[1], "./test", s_size);
 	
 	return EXIT_SUCCESS;
 }
