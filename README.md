@@ -9,7 +9,7 @@ I'm rewriting it in the C language with the objective of not having memory leaks
 
 ## Building
 
-`gcc -Wall -Wextra -pedantic -o gogunpack gogunpack.c`
+Just run `make`
 
 ## Usage
 
