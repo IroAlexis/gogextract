@@ -124,19 +124,28 @@ char* get_name_game(const char* path)
 }
 
 
-long get_file_size(const char* path)
+long get_file_size(const char* path, long l_end)
 {
 	FILE* stream;
+	long  ix;
 	long  size;
+	char  line[BUFFER];
 	
+	// TODO Revise the return
 	size = -1;
 	
-	stream = fopen (path, "r");
+	stream = fopen(path, "r");
 	if (NULL != stream)
 	{
-		// Go to end
-		fseek(stream, 0, 519);
-		size = ftell(stream);
+		ix = 1;
+		
+		while (fgets(line, sizeof(line), stream) != NULL)
+		{
+			if (ix == l_end)
+				size = ftell(stream);
+			
+			ix++;
+		}
 		
 		fclose(stream);
 	}
@@ -194,7 +203,7 @@ int main(int argc, char* argv[])
 	o_size = get_const (argv[1], OFFSET, strlen(OFFSET));
 	printf("script_lines: %d\n", o_size);
 	
-	s_size = get_file_size(argv[1]);
+	s_size = get_file_size(argv[1], o_size);
 	printf("Makeself script size: %ld\n", s_size);
 	
 	f_size = get_const(argv[1], FILESIZES, strlen(FILESIZES));
