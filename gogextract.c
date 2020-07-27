@@ -192,7 +192,7 @@ int main(int argc, char* argv[])
 	long  s_size;
 	char* file = NULL;
 	
-	file = get_name_game (argv[1]);
+	file = get_name_game(argv[1]);
 	file = format_string(file, '-');
 	printf("%s\n", file);
 	
@@ -200,7 +200,7 @@ int main(int argc, char* argv[])
 	
 	free(file);
 	
-	o_size = get_script_const (argv[1], OFFSET, strlen(OFFSET));
+	o_size = get_script_const(argv[1], OFFSET, strlen(OFFSET));
 	printf("Script lines: %d\n", o_size);
 	
 	s_size = get_script_size(argv[1], o_size);
