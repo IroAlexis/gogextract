@@ -124,7 +124,7 @@ char* get_name_game(const char* path)
 }
 
 
-long get_script_size(const char* path, long l_end)
+long get_script_size(const char* path, const long l_end)
 {
 	FILE* stream;
 	long  ix;
@@ -134,6 +134,8 @@ long get_script_size(const char* path, long l_end)
 	// TODO Revise the return
 	size = -1;
 	
+	// Require through the entire script at least once
+	// and need open not in binary mode
 	stream = fopen(path, "r");
 	if (NULL != stream)
 	{
@@ -162,19 +164,16 @@ void extract_script(const char* src, const char* dest, const long max)
 	char   line[1];
 	size_t nb;
 	
-	s_stream = fopen(src, "rb");
-	if (NULL != s_stream)
+	// FIXME Exceed disk size ?
+	d_stream = fopen(dest, "wb");
+	if (NULL != d_stream)
 	{
-		d_stream = fopen(dest, "wb");
-		if (NULL != d_stream)
+		s_stream = fopen(src, "rb");
+		if (NULL != s_stream)
 		{
-			while (fgets(line, sizeof(line), s_stream) != NULL)
+			// TODO Use fread
+			while ()
 			{
-				if (ftell(s_stream) <= max)
-				{
-					//fwrite(line, 1, nb, d_stream);
-					printf("%s\n", line);
-				}
 			}
 			
 			fclose(d_stream);
