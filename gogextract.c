@@ -131,11 +131,11 @@ long get_file_size(const char* path)
 	
 	size = -1;
 	
-	stream = fopen (path, "rb");
+	stream = fopen (path, "r");
 	if (NULL != stream)
 	{
 		// Go to end
-		fseek(stream, 0, SEEK_END);
+		fseek(stream, 0, 519);
 		size = ftell(stream);
 		
 		fclose(stream);
@@ -187,17 +187,19 @@ int main(int argc, char* argv[])
 	file = format_string(file, '-');
 	printf("%s\n", file);
 	
-	mkdir (file, MODE_DIR);
+	//mkdir(file, MODE_DIR);
 	
 	free(file);
 	
 	o_size = get_const (argv[1], OFFSET, strlen(OFFSET));
 	printf("script_lines: %d\n", o_size);
-	f_size = get_const(argv[1], FILESIZES, strlen(FILESIZES));
-	printf("MojoSetup archive size: %d\n", f_size);
 	
 	s_size = get_file_size(argv[1]);
 	printf("Makeself script size: %ld\n", s_size);
+	
+	f_size = get_const(argv[1], FILESIZES, strlen(FILESIZES));
+	printf("MojoSetup archive size: %d\n", f_size);
+	
 	//extract_script(argv[1], "./test", s_size);
 	
 	return EXIT_SUCCESS;
