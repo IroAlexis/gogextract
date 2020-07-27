@@ -18,7 +18,7 @@
 #define TAG       " (GOG.com)\"\n"
 
 
-int get_const(const char* path, const char* str, const int size)
+int get_script_const(const char* path, const char* str, const int size)
 {
 	int   rslt;
 	char  line[BUFFER];
@@ -124,7 +124,7 @@ char* get_name_game(const char* path)
 }
 
 
-long get_file_size(const char* path, long l_end)
+long get_script_size(const char* path, long l_end)
 {
 	FILE* stream;
 	long  ix;
@@ -200,13 +200,13 @@ int main(int argc, char* argv[])
 	
 	free(file);
 	
-	o_size = get_const (argv[1], OFFSET, strlen(OFFSET));
-	printf("script_lines: %d\n", o_size);
+	o_size = get_script_const (argv[1], OFFSET, strlen(OFFSET));
+	printf("Script lines: %d\n", o_size);
 	
-	s_size = get_file_size(argv[1], o_size);
+	s_size = get_script_size(argv[1], o_size);
 	printf("Makeself script size: %ld\n", s_size);
 	
-	f_size = get_const(argv[1], FILESIZES, strlen(FILESIZES));
+	f_size = get_script_const(argv[1], FILESIZES, strlen(FILESIZES));
 	printf("MojoSetup archive size: %d\n", f_size);
 	
 	//extract_script(argv[1], "./test", s_size);
