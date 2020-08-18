@@ -161,8 +161,9 @@ void extract_script(const char* src, const char* dest, const long max)
 {
 	FILE*  s_stream;
 	FILE*  d_stream;
-	char   line[1];
-	size_t nb;
+	char   buffer[max];
+	
+	// Split max lenght
 	
 	// FIXME Exceed disk size ?
 	d_stream = fopen(dest, "wb");
@@ -171,10 +172,9 @@ void extract_script(const char* src, const char* dest, const long max)
 		s_stream = fopen(src, "rb");
 		if (NULL != s_stream)
 		{
-			// TODO Use fread
-			while ()
-			{
-			}
+			// FIXME One buffer and can be
+			fread(buffer, max, 1, s_stream);
+			fwrite(buffer, max, 1, d_stream);
 			
 			fclose(d_stream);
 			fclose(s_stream);
@@ -208,7 +208,7 @@ int main(int argc, char* argv[])
 	f_size = get_script_const(argv[1], FILESIZES, strlen(FILESIZES));
 	printf("MojoSetup archive size: %d\n", f_size);
 	
-	//extract_script(argv[1], "./test", s_size);
+	extract_script(argv[1], "./script.sh", s_size);
 	
 	return EXIT_SUCCESS;
 }
