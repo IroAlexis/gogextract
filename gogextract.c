@@ -8,7 +8,7 @@
 
 #define NAME_DIR "game"
 #define MODE_DIR 0755
-#define BUFFER   512
+#define SIZE     1024
 
 #define ERR_FILE -1
 
@@ -21,7 +21,7 @@
 int get_script_const(const char* path, const char* str, const int size)
 {
 	int   rslt;
-	char  line[BUFFER];
+	char  line[SIZE];
 	char* occ;
 	FILE* stream;
 	
@@ -75,10 +75,10 @@ char* get_name_game(const char* path)
 {
 	char*         rslt;
 	FILE*         stream;
-	char          line[BUFFER];
+	char          line[SIZE];
 	char*         occ;
 	unsigned long l_occ;
-	char          tmp[BUFFER];
+	char          tmp[SIZE];
 	unsigned long l_tmp;
 	unsigned long l_tag;
 	unsigned long size;
@@ -129,7 +129,7 @@ long get_script_size(const char* path, const long l_end)
 	FILE* stream;
 	long  ix;
 	long  size;
-	char  line[BUFFER];
+	char  line[SIZE];
 	
 	// TODO Revise the return
 	size = -1;
@@ -160,9 +160,12 @@ void extract_script(const char* src, const char* dest, const long max)
 {
 	FILE*  s_stream;
 	FILE*  d_stream;
-	char   buffer[max];
+	char   buffer[SIZE];
+	size_t nmemb;
+	size_t r_bloc;
 	
 	// Split max lenght
+	nmemb = max / SIZE;
 	
 	// FIXME Exceed disk size ?
 	d_stream = fopen(dest, "wb");
@@ -171,9 +174,18 @@ void extract_script(const char* src, const char* dest, const long max)
 		s_stream = fopen(src, "rb");
 		if (NULL != s_stream)
 		{
-			// FIXME Implementation isn't ok for me
-			fread(buffer, max, 1, s_stream);
-			fwrite(buffer, max, 1, d_stream);
+			for (r_bloc = 1; r_bloc <= nmemb; r_bloc++)
+			{
+				fread(buffer, SIZE, 1, s_stream);
+				fwrite(buffer, SIZE, 1, d_stream);
+			}
+			
+			// Write the data rest if we aren't end script
+			if (ftell(s_stream) != max)
+			{
+				fread(buffer, max % SIZE, 1, s_stream);
+				fwrite(buffer, max % SIZE, 1, d_stream);
+			}
 			
 			fclose(d_stream);
 			fclose(s_stream);
