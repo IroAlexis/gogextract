@@ -181,7 +181,7 @@ void extract_script(const char* src, const char* dest, const long max)
 			}
 			
 			// Write the data rest if we aren't end script
-			if (ftell(s_stream) != max)
+			if (ftell(s_stream) < max)
 			{
 				fread(buffer, max % SIZE, 1, s_stream);
 				fwrite(buffer, max % SIZE, 1, d_stream);
