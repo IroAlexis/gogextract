@@ -215,7 +215,6 @@ void extract_setup_archive(const char* src, const char* dest,
 			// Position after script
 			fseek(s_stream, b_pos, SEEK_SET);
 			
-			// End position for setup archive
 			for (r_bloc = 1; r_bloc <= nmemb; r_bloc++)
 			{
 				fread(buffer, SIZE, 1, s_stream);
