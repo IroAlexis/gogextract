@@ -201,11 +201,15 @@ int main(int argc, char* argv[])
 	o_size = get_script_const(argv[1], OFFSET, strlen(OFFSET));
 	fprintf(stdout, "Script lines: %d\n", o_size);
 	
+	fprintf(stdout, "Makeself script size: ");
+	fflush(stdout);
 	s_size = get_script_size(argv[1], o_size);
-	fprintf(stdout, "Makeself script size: %ld\n", s_size);
+	fprintf(stdout, "%ld\n", s_size);
 	
+	fprintf(stdout, "MojoSetup archive size: ");
+	fflush(stdout);
 	f_size = get_script_const(argv[1], FILESIZES, strlen(FILESIZES));
-	fprintf(stdout, "MojoSetup archive size: %d\n", f_size);
+	fprintf(stdout, "%d\n", f_size);
 	
 	extract_script(argv[1], "./script.sh", s_size);
 	
