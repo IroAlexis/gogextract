@@ -156,7 +156,6 @@ long get_script_size(const char* path, const long l_end)
 }
 
 
-// Not functional
 void extract_script(const char* src, const char* dest, const long max)
 {
 	FILE*  s_stream;
@@ -172,7 +171,7 @@ void extract_script(const char* src, const char* dest, const long max)
 		s_stream = fopen(src, "rb");
 		if (NULL != s_stream)
 		{
-			// FIXME One buffer and can be
+			// FIXME Implementation isn't ok for me
 			fread(buffer, max, 1, s_stream);
 			fwrite(buffer, max, 1, d_stream);
 			
@@ -193,20 +192,20 @@ int main(int argc, char* argv[])
 	
 	file = get_name_game(argv[1]);
 	file = format_string(file, '-');
-	printf("%s\n", file);
+	fprintf(stdout, "%s\n", file);
 	
 	//mkdir(file, MODE_DIR);
 	
 	free(file);
 	
 	o_size = get_script_const(argv[1], OFFSET, strlen(OFFSET));
-	printf("Script lines: %d\n", o_size);
+	fprintf(stdout, "Script lines: %d\n", o_size);
 	
 	s_size = get_script_size(argv[1], o_size);
-	printf("Makeself script size: %ld\n", s_size);
+	fprintf(stdout, "Makeself script size: %ld\n", s_size);
 	
 	f_size = get_script_const(argv[1], FILESIZES, strlen(FILESIZES));
-	printf("MojoSetup archive size: %d\n", f_size);
+	fprintf(stdout, "MojoSetup archive size: %d\n", f_size);
 	
 	extract_script(argv[1], "./script.sh", s_size);
 	
