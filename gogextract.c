@@ -194,6 +194,47 @@ void extract_script(const char* src, const char* dest, const long max)
 }
 
 
+void extract_setup_archive(const char* src, const char* dest,
+						   const long b_pos, const long max)
+{
+	FILE*  s_stream;
+	FILE*  d_stream;
+	char   buffer[SIZE];
+	size_t nmemb;
+	size_t r_bloc;
+	
+	nmemb = max / SIZE;
+	
+	// FIXME Exceed disk size ?
+	d_stream = fopen(dest, "wb");
+	if (NULL != d_stream)
+	{
+		s_stream = fopen(src, "rb");
+		if (NULL != s_stream)
+		{
+			// Position after script
+			fseek(s_stream, b_pos, SEEK_SET);
+			
+			// End position for setup archive
+			for (r_bloc = 1; r_bloc <= nmemb; r_bloc++)
+			{
+				fread(buffer, SIZE, 1, s_stream);
+				fwrite(buffer, SIZE, 1, d_stream);
+			}
+			
+			if (ftell(d_stream) < max)
+			{
+				fread(buffer, max % SIZE, 1, s_stream);
+				fwrite(buffer, max % SIZE, 1, d_stream);
+			}
+			
+			fclose(s_stream);
+			fclose(d_stream);
+		}
+	}
+}
+
+
 int main(int argc, char* argv[])
 {
 	// It is just a test for the moment
@@ -224,6 +265,7 @@ int main(int argc, char* argv[])
 	fprintf(stdout, "%d\n", f_size);
 	
 	extract_script(argv[1], "./script.sh", s_size);
+	extract_setup_archive(argv[1], "./mojosetup.tar.gz", s_size, f_size);
 	
 	return EXIT_SUCCESS;
 }
