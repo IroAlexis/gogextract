@@ -202,8 +202,8 @@ void extract_data(const char* src, const char* dest,
 int main(int argc, char* argv[])
 {
 	// It is just a test for the moment
-	int   f_size;
-	int   o_size;
+	long  f_size;
+	long  o_size;
 	long  s_size;
 	char* file = NULL;
 	
@@ -216,7 +216,7 @@ int main(int argc, char* argv[])
 	free(file);
 	
 	o_size = get_script_const(argv[1], OFFSET, strlen(OFFSET));
-	fprintf(stdout, "Script lines: %d\n", o_size);
+	fprintf(stdout, "Script lines: %ld\n", o_size);
 	
 	fprintf(stdout, "Makeself script size: ");
 	fflush(stdout);
@@ -226,7 +226,7 @@ int main(int argc, char* argv[])
 	fprintf(stdout, "MojoSetup archive size: ");
 	fflush(stdout);
 	f_size = get_script_const(argv[1], FILESIZES, strlen(FILESIZES));
-	fprintf(stdout, "%d\n", f_size);
+	fprintf(stdout, "%ld\n", f_size);
 	
 	extract_data(argv[1], "./script.sh", 0, s_size);
 	extract_data(argv[1], "./mojosetup.tar.gz", s_size, f_size);
