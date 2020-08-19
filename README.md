@@ -13,7 +13,7 @@ Just run `make`
 
 ## Usage
 
-Not available for moment but you have always the initial project : `legacy/gogextract.py <input file> <output dir>`
+`./gogextract <input file> <output dir>`
 
 Output files will be named `unpacker.sh`, `mojosetup.tar.gz` and `data.zip`.
 
