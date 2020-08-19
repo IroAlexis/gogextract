@@ -156,16 +156,19 @@ long get_script_size(const char* path, const long l_end)
 }
 
 
-void extract_script(const char* src, const char* dest, const long max)
+void extract_data(const char* src, const char* dest,
+				  const long pos, const long size)
 {
-	FILE*  s_stream;
-	FILE*  d_stream;
-	char   buffer[SIZE];
-	size_t nmemb;
-	size_t r_bloc;
+	FILE* s_stream;
+	FILE* d_stream;
+	char  buffer[SIZE];
+	long  r_bloc;
+	long  nmemb;
+	long  end;
 	
 	// Split max lenght
-	nmemb = max / SIZE;
+	nmemb = size / SIZE;
+	end = pos + size;
 	
 	// FIXME Exceed disk size ?
 	d_stream = fopen(dest, "wb");
@@ -174,46 +177,8 @@ void extract_script(const char* src, const char* dest, const long max)
 		s_stream = fopen(src, "rb");
 		if (NULL != s_stream)
 		{
-			for (r_bloc = 1; r_bloc <= nmemb; r_bloc++)
-			{
-				fread(buffer, SIZE, 1, s_stream);
-				fwrite(buffer, SIZE, 1, d_stream);
-			}
-			
-			// Write the data rest if we aren't end script
-			if (ftell(s_stream) < max)
-			{
-				fread(buffer, max % SIZE, 1, s_stream);
-				fwrite(buffer, max % SIZE, 1, d_stream);
-			}
-			
-			fclose(d_stream);
-			fclose(s_stream);
-		}
-	}
-}
-
-
-void extract_setup_archive(const char* src, const char* dest,
-						   const long b_pos, const long max)
-{
-	FILE*  s_stream;
-	FILE*  d_stream;
-	char   buffer[SIZE];
-	size_t nmemb;
-	size_t r_bloc;
-	
-	nmemb = max / SIZE;
-	
-	// FIXME Exceed disk size ?
-	d_stream = fopen(dest, "wb");
-	if (NULL != d_stream)
-	{
-		s_stream = fopen(src, "rb");
-		if (NULL != s_stream)
-		{
-			// Position after script
-			fseek(s_stream, b_pos, SEEK_SET);
+			// Set the position in the source stream
+			fseek(s_stream, pos, SEEK_SET);
 			
 			for (r_bloc = 1; r_bloc <= nmemb; r_bloc++)
 			{
@@ -221,10 +186,10 @@ void extract_setup_archive(const char* src, const char* dest,
 				fwrite(buffer, SIZE, 1, d_stream);
 			}
 			
-			if (ftell(d_stream) < max)
+			if (ftell(s_stream) < end)
 			{
-				fread(buffer, max % SIZE, 1, s_stream);
-				fwrite(buffer, max % SIZE, 1, d_stream);
+				fread(buffer, size % SIZE, 1, s_stream);
+				fwrite(buffer, size % SIZE, 1, d_stream);
 			}
 			
 			fclose(s_stream);
@@ -263,8 +228,8 @@ int main(int argc, char* argv[])
 	f_size = get_script_const(argv[1], FILESIZES, strlen(FILESIZES));
 	fprintf(stdout, "%d\n", f_size);
 	
-	extract_script(argv[1], "./script.sh", s_size);
-	extract_setup_archive(argv[1], "./mojosetup.tar.gz", s_size, f_size);
+	extract_data(argv[1], "./script.sh", 0, s_size);
+	extract_data(argv[1], "./mojosetup.tar.gz", s_size, f_size);
 	
 	return EXIT_SUCCESS;
 }
