@@ -156,8 +156,8 @@ long get_script_size(const char* path, const long l_end)
 }
 
 
-void extract_data(const char* src, const char* dest,
-				  const long pos, const long size)
+void extract_script(const char* src, const char* dest,
+					const long pos, const long size)
 {
 	FILE* s_stream;
 	FILE* d_stream;
@@ -199,6 +199,50 @@ void extract_data(const char* src, const char* dest,
 }
 
 
+void extract_data(const char* src, const char* dest, const long pos)
+{
+	FILE* s_stream;
+	FILE* d_stream;
+	char  buffer[SIZE];
+	long  f_size;
+	long  cur;
+	
+	// FIXME Exceed disk size ?
+	d_stream = fopen(dest, "wb");
+	if (NULL != d_stream)
+	{
+		s_stream = fopen(src, "rb");
+		if (NULL != s_stream)
+		{
+			// Find the file size
+			fseek(s_stream, 0, SEEK_END);
+			f_size = ftell(s_stream);
+			
+			// Set the position in the source stream
+			fseek(s_stream, pos, SEEK_SET);
+			
+			// Prevention for not to go beyond the EOF
+			for (cur = ftell(s_stream);
+				 cur + SIZE < f_size;
+				 cur = ftell(s_stream))
+			{
+				fread(buffer, SIZE, 1, s_stream);
+				fwrite(buffer, SIZE, 1, d_stream);
+			}
+			
+			// Save the data rest
+			if (cur < f_size)
+			{
+				fread(buffer, f_size - cur, 1, s_stream);
+				fwrite(buffer, f_size - cur, 1, d_stream);
+			}
+			fclose(s_stream);
+			fclose(d_stream);
+		}
+	}
+}
+
+
 int main(int argc, char* argv[])
 {
 	// It is just a test for the moment
@@ -228,8 +272,9 @@ int main(int argc, char* argv[])
 	f_size = get_script_const(argv[1], FILESIZES, strlen(FILESIZES));
 	fprintf(stdout, "%ld\n", f_size);
 	
-	extract_data(argv[1], "./script.sh", 0, s_size);
-	extract_data(argv[1], "./mojosetup.tar.gz", s_size, f_size);
+	extract_script(argv[1], "./script.sh", 0, s_size);
+	extract_script(argv[1], "./mojosetup.tar.gz", s_size, f_size);
+	extract_data(argv[1], "./data.zip", s_size + f_size);
 	
 	return EXIT_SUCCESS;
 }
