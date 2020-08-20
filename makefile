@@ -1,8 +1,8 @@
 NAME := ${notdir ${realpath .}}
-VERSION := 0.0.1
+VERSION := 0.1
 
 CC := gcc
-CFLAGS := -Wall -Wextra
+CFLAGS := -Wall -Wextra -pedantic
 LDFLAGS :=
 
 MKDIR := mkdir -p
