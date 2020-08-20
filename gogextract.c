@@ -175,7 +175,7 @@ long get_script_size(const char* path, const long l_end)
 }
 
 
-void extract_script(const char* src, const char* dest,
+void extract_setup(const char* src, const char* dest,
 					const long pos, const long size)
 {
 	FILE* s_stream;
@@ -297,8 +297,8 @@ int main(int argc, char* argv[])
 	f_size = get_script_const(argv[1], FILESIZES, strlen(FILESIZES));
 	fprintf(stdout, "%ld\n", f_size);
 	
-	extract_script(argv[1], "./script.sh", 0, s_size);
-	extract_script(argv[1], "./mojosetup.tar.gz", s_size, f_size);
+	extract_setup(argv[1], "./script.sh", 0, s_size);
+	extract_setup(argv[1], "./mojosetup.tar.gz", s_size, f_size);
 	extract_data(argv[1], "./data.zip", s_size + f_size);
 	
 	return EXIT_SUCCESS;
