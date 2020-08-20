@@ -13,7 +13,7 @@ Just run `make`
 
 ## Usage
 
-`./gogextract <input file> <output dir>`
+`./gogextract <input file>`
 
 Output files will be named `unpacker.sh`, `mojosetup.tar.gz` and `data.zip`.
 

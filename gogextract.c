@@ -270,6 +270,12 @@ int main(int argc, char* argv[])
 	long  s_size;
 	char* file = NULL;
 	
+	if (argc != 2)
+	{
+		fprintf(stderr, "Usage: ./gogextract FILE\n");
+		return EXIT_FAILURE;
+	}
+	
 	file = get_name_game(argv[1]);
 	file = format_string(file, '-');
 	fprintf(stdout, "%s\n", file);
