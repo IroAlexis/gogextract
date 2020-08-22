@@ -1,11 +1,10 @@
 # GOG Extract
 
-The [project] is developped by @Yepoleb.
-Script for unpacking GOG Linux installers.
+The [project] is developped by @Yepoleb. I'm rewriting it in the C language with the objective of not having memory leaks.
+
+Script for unpacking GOG Linux installers (don't compatible with DLCs).
 
 Explanation of how it works is in his [blog post].
-
-I'm rewriting it in the C language with the objective of not having memory leaks
 
 ## Building
 
