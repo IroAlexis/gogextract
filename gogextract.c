@@ -207,7 +207,7 @@ long get_script_size(const char* path, const long l_end)
  * @param pos  The begin position inside GOG installer
  * @param size The size file that be extract
  **/
-void extract_setup(const char* src, const char* dest,
+void extract_data(const char* src, const char* dest,
 					const long pos, const long size)
 {
 	FILE* s_stream;
@@ -256,7 +256,7 @@ void extract_setup(const char* src, const char* dest,
  * @param dest The file path destination, can't be NULL
  * @param pos  The begin position of the binary part in the GOG installer
  **/
-void extract_data(const char* src, const char* dest, const long pos)
+void extract_bin(const char* src, const char* dest, const long pos)
 {
 	FILE* s_stream;
 	FILE* d_stream;
@@ -335,9 +335,9 @@ int main(int argc, char* argv[])
 	f_size = get_script_const(argv[1], FILESIZES, strlen(FILESIZES));
 	fprintf(stdout, "%ld\n", f_size);
 	
-	extract_setup(argv[1], "./script.sh", 0, s_size);
-	extract_setup(argv[1], "./mojosetup.tar.gz", s_size, f_size);
-	extract_data(argv[1], "./data.zip", s_size + f_size);
+	extract_data(argv[1], "./script.sh", 0, s_size);
+	extract_data(argv[1], "./mojosetup.tar.gz", s_size, f_size);
+	extract_bin(argv[1], "./data.zip", s_size + f_size);
 	
 	return EXIT_SUCCESS;
 }
