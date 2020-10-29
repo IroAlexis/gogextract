@@ -21,7 +21,7 @@ Here is the first draft for game standalone extraction :
 * `unzip data.zip "data/noarch/*" -d /tmp/` the initial extraction is done in RAM (by default)
 * `mv /tmp/data/noarch/* /path/to/game` we move the files that are interessing in the specified place
 
-We take into account that one has to be careful with SSDs
+We take into account that one has to be careful with SSDs.
 
 ## Roadmap
 * Add header(s) file(s)

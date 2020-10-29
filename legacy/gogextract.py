@@ -6,18 +6,9 @@ import os
 from os import path
 import sys
 
-# Constante
-# Expression reguliere
-# Recherche la chaine de caracteres (pas de despcialisaiton) : filesizes="xxxx"
-# Et extrait le nombre correspondant a la taille (en mégabits) de de l'installeur
 FILESIZE_RE = re.compile(r'filesizes="(\d+?)"')
-# Recherche la chaine de caracteres : offset=`head -n xxxx "$0"
-# Et extrait le nombre
 OFFSET_RE = re.compile(r'offset=`head -n (\d+?) "\$0"')
 
-
-# Controle du passage des arguments
-# Un seul argument extrait tout dans le chemin
 if len(sys.argv) == 2:
     input_path = sys.argv[1]
     output_path = "./"
@@ -28,12 +19,10 @@ else:
     print("Usage: {} <input file> <output dir>".format(sys.argv[0]))
     exit(1)
 
-# Ouvre le fichier en lecture binaire
 game_bin = open(input_path, "rb")
 os.makedirs(output_path, exist_ok=True)
 
-# [legacy] Read the first 10kb so we can determine the script line number
-# Lis les 10k permiers bits, "nous determinons le nombre de ligne du script ?"
+# Read the first 10kb so we can determine the script line number
 beginning = game_bin.read(10240).decode("utf-8", errors="ignore")
 offset_match = OFFSET_RE.search(beginning)
 script_lines = int(offset_match.group(1))
@@ -67,3 +56,4 @@ dataoffset = script_size + filesize
 game_bin.seek(dataoffset, io.SEEK_SET)
 with open(path.join(output_path, "data.zip"), "wb") as datafile:
     shutil.copyfileobj(game_bin, datafile)
+
