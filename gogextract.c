@@ -335,7 +335,7 @@ int main(int argc, char* argv[])
 	f_size = get_script_const(argv[1], FILESIZES, strlen(FILESIZES));
 	fprintf(stdout, "%ld\n", f_size);
 	
-	extract_data(argv[1], "./script.sh", 0, s_size);
+	extract_data(argv[1], "./unpacker.sh", 0, s_size);
 	extract_data(argv[1], "./mojosetup.tar.gz", s_size, f_size);
 	extract_bin(argv[1], "./data.zip", s_size + f_size);
 	
