@@ -29,6 +29,7 @@ We take into account that one has to be careful with SSDs.
 * Bad behavior with the name of some games
 * Game standalone extraction
 * DLCs Support
+* Use Meson build system
 
 ## License
 
