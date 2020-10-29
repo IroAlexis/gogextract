@@ -17,9 +17,11 @@ Just run `make`
 Output files will be named `unpacker.sh`, `mojosetup.tar.gz` and `data.zip`.
 
 ## Roadmap
-* Divide the file (for improved maintainability)
 * Add header(s) file(s)
-* ...
+* Divide the file (for improved maintainability)
+* Bad behavior with the name of some games
+* Game standalone extraction
+* DLCs Support
 
 ## License
 
