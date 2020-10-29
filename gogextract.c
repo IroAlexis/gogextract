@@ -37,6 +37,13 @@
 #define TAG       " (GOG.com)\"\n"
 
 
+/*!
+ * @brief Function that get the number of lines of the script unpacker.sh
+ * @param path The file path, can't be NULL
+ * @param str  Reccurent data allowing to have the number of lines, can't be NULL
+ * @param size Buffer
+ * @return The number of lines reading
+ **/
 int get_script_const(const char* path, const char* str, const int size)
 {
 	int   rslt;
@@ -69,10 +76,17 @@ int get_script_const(const char* path, const char* str, const int size)
 		fclose(stream);
 	}
 	
+	// TODO If we found not `str`, we return nothing ?
 	return rslt;
 }
 
 
+/*!
+ * @brief Function that return the game title in the Unix style (without space and special chars)
+ * @param str Title game, can't be NULL
+ * @param ch  Char you wish to eliminate (may be destined to disappear)
+ * @return
+ **/
 char* format_string(char* str, const char ch)
 {
 	unsigned long ix;
@@ -90,6 +104,11 @@ char* format_string(char* str, const char ch)
 }
 
 
+/*!
+ * @brief Function that find the game title inside the script unpacker.sh
+ * @param path The file path, can't be NULL
+ * @return The game title
+ **/
 char* get_name_game(const char* path)
 {
 	char*         rslt;
@@ -139,10 +158,17 @@ char* get_name_game(const char* path)
 		}
 	}
 	
+	// TODO If we found not LABEL, we return NULL but problem for later ?
 	return rslt;
 }
 
 
+/*!
+ * @brief Function that get the script size in bytes
+ * @param path  The file path, can't be NULL
+ * @param l_end The last line of the script
+ * @return The script size
+ **/
 long get_script_size(const char* path, const long l_end)
 {
 	FILE* stream;
@@ -153,8 +179,7 @@ long get_script_size(const char* path, const long l_end)
 	// TODO Revise the return
 	size = -1;
 	
-	// Require through the entire script at least once
-	// and need open not in binary mode
+	// Can't open in binary mode
 	stream = fopen(path, "r");
 	if (NULL != stream)
 	{
@@ -175,6 +200,13 @@ long get_script_size(const char* path, const long l_end)
 }
 
 
+/*!
+ * @brief Function that extract a data file of GOG installer
+ * @param src  The file path source, can't be NULL
+ * @param dest The file path destination, can't be NULL
+ * @param pos  The begin position inside GOG installer
+ * @param size The size file that be extract
+ **/
 void extract_setup(const char* src, const char* dest,
 					const long pos, const long size)
 {
@@ -218,6 +250,12 @@ void extract_setup(const char* src, const char* dest,
 }
 
 
+/*!
+ * @brief Function that extract the binary part (`data.zip`) of the GOG installer
+ * @param src  The file path source, can't be NULL
+ * @param dest The file path destination, can't be NULL
+ * @param pos  The begin position of the binary part in the GOG installer
+ **/
 void extract_data(const char* src, const char* dest, const long pos)
 {
 	FILE* s_stream;
