@@ -39,10 +39,6 @@ int main(int argc, char* argv[])
 		return EXIT_FAILURE;
 	}
 	
-	file = get_name_game(argv[1]);
-	file = format_string(file, '-');
-	fprintf(stdout, "%s\n", file);
-	
 	//mkdir(file, MODE_DIR);
 	
 	free(file);
