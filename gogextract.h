@@ -36,7 +36,7 @@
  * @param path The file path, can't be NULL
  * @param str  Reccurent data allowing to have the number of lines, can't be NULL
  * @param size Buffer
- * @return The number of lines reading
+ * @return The number of lines, -1 otherwise
  **/
 int get_script_const(const char* path, const char* str, const int size);
 

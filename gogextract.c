@@ -30,11 +30,11 @@ int get_script_const(const char* path, const char* str, const int size)
 	FILE* stream;
 	
 	
+	rslt = ERR_FILE;
+	
 	stream = fopen(path, "r");
 	if (NULL != stream)
 	{
-		rslt = ERR_FILE;
-		
 		// Read the file line by line
 		while (fgets(line, sizeof(line), stream) != NULL)
 		{
@@ -54,7 +54,6 @@ int get_script_const(const char* path, const char* str, const int size)
 		fclose(stream);
 	}
 	
-	// TODO If we found not `str`, we return nothing ?
 	return rslt;
 }
 

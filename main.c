@@ -48,7 +48,13 @@ int main(int argc, char* argv[])
 	free(file);
 	
 	o_size = get_script_const(argv[1], OFFSET, strlen(OFFSET));
-	fprintf(stdout, "Script lines: %ld\n", o_size);
+	if (o_size > 0)
+		fprintf(stdout, "Script lines: %ld\n", o_size);
+	else
+	{
+		fprintf(stderr, "gogextract: Invalid GOG installer, script size is much too small...\n");
+		return EXIT_FAILURE;
+	}
 	
 	fprintf(stdout, "Makeself script size: ");
 	fflush(stdout);
