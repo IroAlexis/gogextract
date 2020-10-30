@@ -60,7 +60,14 @@ int main(int argc, char* argv[])
 	fprintf(stdout, "Makeself script size: ");
 	fflush(stdout);
 	s_size = get_script_size(argv[1], o_size);
-	fprintf(stdout, "%ld\n", s_size);
+	if (s_size != -1)
+		fprintf(stdout, "%ld\n", s_size);
+	else
+	{
+		// Impossible to be here but you never know
+		fprintf (stderr, ":gogextract:get_script_size: Problem with the line number\n");
+		return EXIT_FAILURE;
+	}
 	
 	fprintf(stdout, "MojoSetup archive size: ");
 	fflush(stdout);

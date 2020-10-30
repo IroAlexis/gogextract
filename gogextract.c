@@ -136,24 +136,26 @@ long get_script_size(const char* path, const long l_end)
 	long  size;
 	char  line[512];
 	
-	// TODO Revise the return
 	size = -1;
 	
-	// Can't open in binary mode
-	stream = fopen(path, "r");
-	if (NULL != stream)
+	if (l_end != 0)
 	{
-		ix = 1;
-		
-		while (fgets(line, sizeof(line), stream) != NULL)
+		// Can't open in binary mode
+		stream = fopen(path, "r");
+		if (NULL != stream)
 		{
-			if (ix == l_end)
-				size = ftell(stream);
+			ix = 1;
 			
-			ix++;
+			while (fgets(line, sizeof(line), stream) != NULL)
+			{
+				if (ix == l_end)
+					size = ftell(stream);
+				
+				ix++;
+			}
+			
+			fclose(stream);
 		}
-		
-		fclose(stream);
 	}
 	
 	return size;
