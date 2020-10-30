@@ -124,7 +124,7 @@ char* get_name_game(const char* path)
 		}
 	}
 	
-	// TODO If we found not LABEL, we return NULL but problem for later ?
+	// If we found not LABEL, we return NULL but problem for later ?
 	return rslt;
 }
 
