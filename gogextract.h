@@ -44,7 +44,7 @@ int get_script_const(const char* path, const char* str, const int size);
 /*!
  * @brief Format the game title in the Unix style (without space and special chars)
  * @param str Title game, can't be NULL
- * @param ch  Char you wish to eliminate (may be destined to disappear)
+ * @param ch  Replace the special chars with the following char (may be destined to disappear)
  * @return
  **/
 char* format_string(char* str, const char ch);
