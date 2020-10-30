@@ -47,8 +47,7 @@ int main(int argc, char* argv[])
 	
 	free(file);
 	
-	//o_size = get_script_const(argv[1], OFFSET, strlen(OFFSET));
-	o_size = -1;
+	o_size = get_script_const(argv[1], OFFSET, strlen(OFFSET));
 	if (o_size > 0)
 		fprintf(stdout, "Script lines: %ld\n", o_size);
 	else if (o_size == 0)
