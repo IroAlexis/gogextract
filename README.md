@@ -24,8 +24,6 @@ Here is the first draft for game standalone extraction :
 We take into account that one has to be careful with SSDs.
 
 ## Roadmap
-* Add header(s) file(s)
-* Divide the file (for improved maintainability)
 * Bad behavior with the name of some games
 * Game standalone extraction
 * DLCs Support
