@@ -134,7 +134,7 @@ long get_script_size(const char* path, const long l_end)
 	FILE* stream;
 	long  ix;
 	long  size;
-	char  line[SIZE];
+	char  line[512];
 	
 	// TODO Revise the return
 	size = -1;
