@@ -49,11 +49,11 @@ ${DEP_PREFIX}%${DEP_SUFFIX}: ${SRC_PREFIX}%${SRC_SUFFIX}
 clean:
 	${RMDIR} ${OBJ_PREFIX}
 
-mrproper: clean
+distclean mrproper: clean
 	${RMDIR} ${DEP_PREFIX}
 	${RM} ${BIN}
 
-archive: mrproper
+archive: distclean
 	 tar -cz -f ${TAR} --exclude ".git" ../${NAME}
 
 BLU:
