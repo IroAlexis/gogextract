@@ -17,33 +17,11 @@
  */
 
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <ctype.h>
-//#include <syslog.h>
+#include "gogextract.h"
 
-#define NAME_DIR "game"
-#define MODE_DIR 0755
 #define SIZE     1024
-
 #define ERR_FILE -1
 
-#define FILESIZES "filesizes=\""
-#define OFFSET    "offset=`head -n "
-#define LABEL     "label=\""
-#define TAG       " (GOG.com)\"\n"
-
-
-/*!
- * @brief Function that get the number of lines of the script unpacker.sh
- * @param path The file path, can't be NULL
- * @param str  Reccurent data allowing to have the number of lines, can't be NULL
- * @param size Buffer
- * @return The number of lines reading
- **/
 int get_script_const(const char* path, const char* str, const int size)
 {
 	int   rslt;
@@ -81,12 +59,6 @@ int get_script_const(const char* path, const char* str, const int size)
 }
 
 
-/*!
- * @brief Function that return the game title in the Unix style (without space and special chars)
- * @param str Title game, can't be NULL
- * @param ch  Char you wish to eliminate (may be destined to disappear)
- * @return
- **/
 char* format_string(char* str, const char ch)
 {
 	unsigned long ix;
@@ -297,48 +269,5 @@ void extract_bin(const char* src, const char* dest, const long pos)
 			fclose(d_stream);
 		}
 	}
-}
-
-
-int main(int argc, char* argv[])
-{
-	// It is just a test for the moment
-	long  f_size;
-	long  o_size;
-	long  s_size;
-	char* file = NULL;
-	
-	if (argc != 2)
-	{
-		fprintf(stderr, "Usage: ./gogextract FILE\n");
-		return EXIT_FAILURE;
-	}
-	
-	file = get_name_game(argv[1]);
-	file = format_string(file, '-');
-	fprintf(stdout, "%s\n", file);
-	
-	//mkdir(file, MODE_DIR);
-	
-	free(file);
-	
-	o_size = get_script_const(argv[1], OFFSET, strlen(OFFSET));
-	fprintf(stdout, "Script lines: %ld\n", o_size);
-	
-	fprintf(stdout, "Makeself script size: ");
-	fflush(stdout);
-	s_size = get_script_size(argv[1], o_size);
-	fprintf(stdout, "%ld\n", s_size);
-	
-	fprintf(stdout, "MojoSetup archive size: ");
-	fflush(stdout);
-	f_size = get_script_const(argv[1], FILESIZES, strlen(FILESIZES));
-	fprintf(stdout, "%ld\n", f_size);
-	
-	extract_data(argv[1], "./unpacker.sh", 0, s_size);
-	extract_data(argv[1], "./mojosetup.tar.gz", s_size, f_size);
-	extract_bin(argv[1], "./data.zip", s_size + f_size);
-	
-	return EXIT_SUCCESS;
 }
 
