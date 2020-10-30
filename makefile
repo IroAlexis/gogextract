@@ -13,6 +13,10 @@ SRC_PREFIX := ./
 SRC_SUFFIX := .c
 SRC := ${wildcard ${SRC_PREFIX}*${SRC_SUFFIX}}
 
+DEP_PREFIX := depends/
+DEP_SUFFIX := .mk
+DEP := ${subst ${SRC_PREFIX},${DEP_PREFIX},${addsuffix ${DEP_SUFFIX},${basename ${SRC}}}}
+
 BIN_PREFIX := ./
 BIN_SUFFIX :=
 BIN := ${BIN_PREFIX}${NAME}${BIN_SUFFIX}
@@ -25,7 +29,7 @@ TAR_PREFIX := ../
 TAR_SUFFIX := .tar.gz
 TAR := ${TAR_PREFIX}${NAME}-${VERSION}${TAR_SUFFIX}
 
-all: ${BIN}
+all: ${DEP} ${BIN}
 
 ${BIN}: ${OBJ}
 	${MKDIR} ${@D}
@@ -35,10 +39,18 @@ ${OBJ_PREFIX}%${OBJ_SUFFIX}: ${SRC_PREFIX}%${SRC_SUFFIX}
 	${MKDIR} ${@D}
 	${CC} -o $@ ${CFLAGS} -c $<
 
+
+${DEP_PREFIX}%${DEP_SUFFIX}: ${SRC_PREFIX}%${SRC_SUFFIX}
+	@${ECHO} "Dependance: $*"
+	${MKDIR} ${@D}
+	${CC} -o $@ ${CFLAGS} -MM -MT ${OBJ_PREFIX}$*${OBJ_SUFFIX} $<
+
+
 clean:
 	${RMDIR} ${OBJ_PREFIX}
 
 mrproper: clean
+	${RMDIR} ${DEP_PREFIX}
 	${RM} ${BIN}
 
 archive: mrproper
