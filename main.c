@@ -47,12 +47,18 @@ int main(int argc, char* argv[])
 	
 	free(file);
 	
-	o_size = get_script_const(argv[1], OFFSET, strlen(OFFSET));
+	//o_size = get_script_const(argv[1], OFFSET, strlen(OFFSET));
+	o_size = -1;
 	if (o_size > 0)
 		fprintf(stdout, "Script lines: %ld\n", o_size);
-	else
+	else if (o_size == 0)
 	{
 		fprintf(stderr, "gogextract: Invalid GOG installer, script size is much too small...\n");
+		return EXIT_FAILURE;
+	}
+	else
+	{
+		fprintf(stderr, "gogextract: Error opening file %s: No such file or directory\n", argv[1]);
 		return EXIT_FAILURE;
 	}
 	
