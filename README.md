@@ -6,9 +6,12 @@ Script for unpacking GOG Linux installers (don't compatible with DLCs).
 
 Explanation of how it works is in his [blog post].
 
-## Building
+## Building GOG Extract
+### Requirements:
+* [libzip] for the game standalone extraction
 
-Just run `make`
+### Building:
+Inside the GOG Extract directory, run: `make` :frog:
 
 ## Usage
 
@@ -29,4 +32,5 @@ Available in [LICENSE](LICENSE) file
 [@Yepoleb]: https://github.com/Yepoleb
 [project]: https://github.com/Yepoleb/gogextract 
 [blog post]: https://yepoleb.github.io/blog/2016/10/09/how-the-gog-linux-installers-work/
+[libzip]: https://libzip.org/
 
