@@ -79,7 +79,9 @@ int extract_game_standalone(const char* path)
 		
 		if (!regexec(&preg, z_stat.name, 0, NULL, 0))
 		{
+			// Get attributes entry
 			zip_file_get_external_attributes(stream, ix, ZIP_FL_UNCHANGED, NULL, &attributes);
+			// Convert attibutes to unix permission
 			perm = attr_to_unix_perm(attributes);
 			
 			npath = z_stat.name + 12;
@@ -88,6 +90,7 @@ int extract_game_standalone(const char* path)
 				safe_create_dir(npath, perm);
 			else
 			{
+				// Open index archive (file)
 				z_file = zip_fopen_index(stream, ix, 0);
 				if (!z_file)
 				{
@@ -95,9 +98,11 @@ int extract_game_standalone(const char* path)
 					return EXIT_FAILURE;
 				}
 				
+				// Place the pointer on the file path where it is intresting for us
 				npath = z_stat.name + 12;
 				//printf("%s\n", npath);
 				
+				// Create the uncompressed file
 				fd = open(npath, O_RDWR | O_TRUNC | O_CREAT, perm);
 				if (fd < 0)
 				{
