@@ -20,6 +20,7 @@
 #include <stdio.h>
 
 #include "gogextract.h"
+#include "gogextract_zip.h"
 
 #define NAME_DIR "game"
 #define MODE_DIR 0755
@@ -77,6 +78,8 @@ int main(int argc, char* argv[])
 	extract_data(argv[1], "./unpacker.sh", 0, s_size);
 	extract_data(argv[1], "./mojosetup.tar.gz", s_size, f_size);
 	extract_bin(argv[1], "./data.zip", s_size + f_size);
+	
+	extract_game_standalone("./data.zip");
 	
 	return EXIT_SUCCESS;
 }

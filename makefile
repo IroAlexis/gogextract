@@ -3,7 +3,7 @@ VERSION := 0.1
 
 CC := gcc
 CFLAGS := -Wall -Wextra -pedantic
-LDFLAGS :=
+LDFLAGS := -lzip
 
 MKDIR := mkdir -p
 RMDIR := rm -rf
