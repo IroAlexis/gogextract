@@ -1,9 +1,23 @@
 #include "gogextract_zip.h"
 
 
-int safe_create_dir(const char* dir)
+int attr_to_unix_perm(const zip_uint32_t attributes)
 {
-	if (mkdir(dir, 0755) < 0)
+	int ix;
+	int perm = (attributes & 1 << 24) ? 1 : 0;
+	
+	for (ix = 1; ix < 9; ix++)
+	{
+		perm <<= 1;
+		perm |= (attributes & 1 << (24 - ix)) ? 1 : 0;
+	}
+	
+	return perm;
+}
+
+int safe_create_dir(const char* dir, const int perm)
+{
+	if (mkdir(dir, perm) < 0)
 	{
 		return EXIT_FAILURE;
 	}
@@ -19,10 +33,12 @@ int extract_game_standalone(const char* path)
 	zip_int64_t      fd;
 	zip_int64_t      nbrf;
 	zip_uint64_t     sum;
+	zip_uint32_t     attributes;
 	zip_t*           stream;
 	struct zip_file* z_file;
 	struct zip_stat  z_stat;
 	
+	int         perm;
 	char        buffer[SIZE];
 	const char* npath;
 	regex_t     preg;
@@ -44,11 +60,13 @@ int extract_game_standalone(const char* path)
 		
 		if (!regexec(&preg, z_stat.name, 0, NULL, 0))
 		{
-			npath = z_stat.name + 12;
-			len = strlen(npath);
+			zip_file_get_external_attributes(stream, ix, ZIP_FL_UNCHANGED, NULL, &attributes);
+			perm = attr_to_unix_perm(attributes);
 			
-			if (npath[len - 1] == '/')
-				safe_create_dir(npath);
+			npath = z_stat.name + 12;
+			
+			if (attributes & (1 << 30))
+				safe_create_dir(npath, perm);
 			else
 			{
 				z_file = zip_fopen_index(stream, ix, 0);
@@ -61,7 +79,7 @@ int extract_game_standalone(const char* path)
 				npath = z_stat.name + 12;
 				//printf("%s\n", npath);
 				
-				fd = open(npath, O_RDWR | O_TRUNC | O_CREAT, 0644);
+				fd = open(npath, O_RDWR | O_TRUNC | O_CREAT, perm);
 				if (fd < 0)
 				{
 					fprintf(stderr, "gogextract: error open file descriptor %s\n", z_stat.name);

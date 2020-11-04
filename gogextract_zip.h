@@ -12,7 +12,9 @@
 #define SIZE 1024
 
 
+int attr_to_unix_perm(const zip_uint32_t attributes);
+
 int extract_game_standalone(const char* path);
 
-int safe_create_dir(const char* dir);
+int safe_create_dir(const char* dir, const int perm);
 
