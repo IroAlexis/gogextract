@@ -7,6 +7,8 @@ int safe_create_dir(const char* dir)
 	{
 		return EXIT_FAILURE;
 	}
+	
+	return EXIT_SUCCESS;
 }
 
 
