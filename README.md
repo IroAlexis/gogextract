@@ -20,10 +20,12 @@ Inside the GOG Extract directory, run: `make` :frog:
 Output files will be named `unpacker.sh`, `mojosetup.tar.gz` and `data.zip`.
 
 ## Roadmap
-* Bad behavior with the name of some games
 * Game standalone extraction
+* Implement arguments
 * DLCs Support
+* ArchLinux installation
 * Use Meson build system
+* Bad behavior with the name of some games
 
 ## License
 
