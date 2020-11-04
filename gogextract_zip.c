@@ -81,6 +81,7 @@ int extract_game_standalone(const char* path)
 					sum += len;
 				}
 				close(fd);
+				zip_fclose(z_file);
 			}
 		}
 	}
