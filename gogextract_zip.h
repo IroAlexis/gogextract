@@ -25,7 +25,6 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <regex.h>
-#include <errno.h>
 #include <zip.h>
 
 #define SIZE 1024
