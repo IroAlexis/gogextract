@@ -17,18 +17,6 @@
  */
 
 
-#include <zip.h>
-
-#define SIZE 1024
-
-
-/*!
- * @brief Convert the file attributes manipulate with libzip in unix file permissions
- * @param attributes File attributes
- * @return Unix file permissions
- **/
-int attr_to_unix_perm(const zip_uint32_t attributes);
-
 
 /*!
  * @brief Extract only the game since the archive

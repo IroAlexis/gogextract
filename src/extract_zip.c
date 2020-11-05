@@ -27,8 +27,17 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <regex.h>
+#include <zip.h>
 
 
+#define SIZE 1024
+
+
+/*!
+ * @brief Convert the file attributes manipulate with libzip in unix file permissions
+ * @param attributes File attributes
+ * @return Unix file permissions
+ **/
 int attr_to_unix_perm(const zip_uint32_t attributes)
 {
 	int ix;
@@ -42,6 +51,7 @@ int attr_to_unix_perm(const zip_uint32_t attributes)
 	
 	return perm;
 }
+
 
 int safe_create_dir(const char* dir, const int perm)
 {
