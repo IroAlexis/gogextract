@@ -9,7 +9,7 @@ MKDIR := mkdir -p
 RMDIR := rm -rf
 ECHO := echo -e
 
-SRC_PREFIX := ./
+SRC_PREFIX := src/
 SRC_SUFFIX := .c
 SRC := ${wildcard ${SRC_PREFIX}*${SRC_SUFFIX}}
 
