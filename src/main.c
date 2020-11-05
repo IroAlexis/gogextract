@@ -18,6 +18,8 @@
 
 
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
 #include "extract_installer.h"
 #include "extract_zip.h"
