@@ -27,6 +27,11 @@ Output files will be named `unpacker.sh`, `mojosetup.tar.gz` and `data.zip`.
 * Use Meson build system
 * Bad behavior with the name of some games
 
+## Acknowledgements
+* [@Yepoleb], for his authorization and creating the project : gogextract
+* @dysliked, for his precious help
+* [@mobius], for the libzip [simple example]
+
 ## License
 
 Available in [LICENSE](LICENSE) file
@@ -35,4 +40,5 @@ Available in [LICENSE](LICENSE) file
 [project]: https://github.com/Yepoleb/gogextract 
 [blog post]: https://yepoleb.github.io/blog/2016/10/09/how-the-gog-linux-installers-work/
 [libzip]: https://libzip.org/
-
+[@mobius]: https://github.com/mobius
+[simple example]: https://gist.github.com/mobius/1759816
