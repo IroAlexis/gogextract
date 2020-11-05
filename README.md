@@ -15,7 +15,7 @@ Inside the GOG Extract directory, run: `make` :frog:
 
 ## Usage
 
-`./gogextract <input file>`
+`gogextract <input file>`
 
 Output files will be named `unpacker.sh`, `mojosetup.tar.gz` and `data.zip`.
 
