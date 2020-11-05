@@ -1,5 +1,5 @@
 /*
- * gogextract.c
+ * extract_installer.c
  * Copyright (C) 2020 Alexis Peypelut <peypeluta@live.fr>
  *
  * gogextract is free software: you can redistribute it and/or modify it
@@ -17,7 +17,15 @@
  */
 
 
-#include "gogextract.h"
+#include "extract_installer.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <ctype.h>
+//#include <syslog.h>
 
 #define SIZE     1024
 #define ERR_FILE -1

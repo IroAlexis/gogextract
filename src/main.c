@@ -19,8 +19,8 @@
 
 #include <stdio.h>
 
-#include "gogextract.h"
-#include "gogextract_zip.h"
+#include "extract_installer.h"
+#include "extract_zip.h"
 
 #define NAME_DIR "game"
 #define MODE_DIR 0755

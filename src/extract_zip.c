@@ -1,5 +1,5 @@
 /*
- * gogextract_zip.c
+ * extract_zip.c
  * Copyright (C) 2020 Alexis Peypelut <peypeluta@live.fr>
  *
  * gogextract is free software: you can redistribute it and/or modify it
@@ -17,7 +17,16 @@
  */
 
 
-#include "gogextract_zip.h"
+#include "extract_zip.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <regex.h>
 
 
 int attr_to_unix_perm(const zip_uint32_t attributes)
