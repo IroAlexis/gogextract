@@ -30,6 +30,63 @@
 #define SIZE     1024
 #define ERR_FILE -1
 
+
+int init_const_installer(const char* path,
+						 long* o_size,
+						 long* s_size,
+						 long* f_size)
+{
+	*o_size = get_script_const(path, OFFSET, strlen(OFFSET));
+	if (*o_size == 0)
+	{
+		fprintf(stderr,
+				"gogextract: Invalid GOG installer, the number of script line are much too small...\n");
+		return EXIT_FAILURE;
+	}
+	if (*o_size < 0)
+	{
+		fprintf(stderr,
+				"gogextract: Error opening file %s: No such file or directory\n",
+				path);
+		return EXIT_FAILURE;
+	}
+	fprintf(stdout, "Script lines: %ld\n", *o_size);
+	
+	fprintf(stdout, "Makeself script size: ");
+	fflush(stdout);
+	
+	*s_size = get_script_size(path, *o_size);
+	if (*s_size == -1)
+	{
+		// Impossible to be here but you never know
+		fprintf(stderr,
+				 ":gogextract:get_script_size: Problem with the line number\n");
+		return EXIT_FAILURE;
+	}
+	fprintf(stdout, "%ld\n", *s_size);
+	
+	fprintf(stdout, "MojoSetup archive size: ");
+	fflush(stdout);
+	*f_size = get_script_const(path, FILESIZES, strlen(FILESIZES));
+	if (*f_size == 0)
+	{
+		fprintf(stderr,
+				"gogextract: Invalid GOG installer, script size is much too small...\n");
+		return EXIT_FAILURE;
+	}
+	if (*f_size < 0)
+	{
+		fprintf(stderr,
+				"gogextract: Error opening file %s: No such file or directory\n",
+				path);
+		return EXIT_FAILURE;
+	}
+	fprintf(stdout, "%ld\n", *f_size);
+	
+	return EXIT_SUCCESS;
+}
+
+
 int get_script_const(const char* path, const char* str, const int size)
 {
 	int   rslt;

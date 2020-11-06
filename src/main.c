@@ -46,36 +46,7 @@ int main(int argc, char* argv[])
 	
 	free(file);
 	
-	o_size = get_script_const(argv[1], OFFSET, strlen(OFFSET));
-	if (o_size > 0)
-		fprintf(stdout, "Script lines: %ld\n", o_size);
-	else if (o_size == 0)
-	{
-		fprintf(stderr, "gogextract: Invalid GOG installer, script size is much too small...\n");
-		return EXIT_FAILURE;
-	}
-	else
-	{
-		fprintf(stderr, "gogextract: Error opening file %s: No such file or directory\n", argv[1]);
-		return EXIT_FAILURE;
-	}
-	
-	fprintf(stdout, "Makeself script size: ");
-	fflush(stdout);
-	s_size = get_script_size(argv[1], o_size);
-	if (s_size != -1)
-		fprintf(stdout, "%ld\n", s_size);
-	else
-	{
-		// Impossible to be here but you never know
-		fprintf (stderr, ":gogextract:get_script_size: Problem with the line number\n");
-		return EXIT_FAILURE;
-	}
-	
-	fprintf(stdout, "MojoSetup archive size: ");
-	fflush(stdout);
-	f_size = get_script_const(argv[1], FILESIZES, strlen(FILESIZES));
-	fprintf(stdout, "%ld\n", f_size);
+	init_const_installer(argv[1], &o_size, &s_size, &f_size);
 	
 	extract_data(argv[1], "./unpacker.sh", 0, s_size);
 	extract_data(argv[1], "./mojosetup.tar.gz", s_size, f_size);
