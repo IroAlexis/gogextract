@@ -25,10 +25,10 @@
 
 /*!
  * @brief Initializes the installer constants
- * @param path   The file path source, can't be NULL
- * @param o_size The number of lines of the script unpacker.sh
- * @param s_size The Makeself script size
- * @param f_size The MojoSetup archive size
+ * @param path   File path source, can't be NULL
+ * @param o_size Number of lines of the script unpacker.sh
+ * @param s_size Makeself script size
+ * @param f_size MojoSetup archive size
  * @return 0 if it is good, -1 otherwise
  **/
 int init_const_installer(const char* path, long* o_size,
@@ -36,10 +36,10 @@ int init_const_installer(const char* path, long* o_size,
 
 
 /*!
- * @brief Get the number of lines of a script
- * @param path The file path, can't be NULL
- * @param str  Reccurent data allowing to have the number of lines, can't be NULL
- * @param size Buffer
+ * @brief Retrieves a specific data from the string containing it
+ * @param path File path, can't be NULL
+ * @param str  String containing the desired data, can't be NULL
+ * @param size Data size
  * @return The number of lines, -1 otherwise
  **/
 int get_script_const(const char* path, const char* str, const int size);
