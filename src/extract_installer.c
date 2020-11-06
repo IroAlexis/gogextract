@@ -31,62 +31,13 @@
 #define ERR_FILE -1
 
 
-int init_const_installer(const char* path,
-						 long* o_size,
-						 long* s_size,
-						 long* f_size)
-{
-	*o_size = get_script_const(path, OFFSET, strlen(OFFSET));
-	if (*o_size == 0)
-	{
-		fprintf(stderr,
-				"gogextract: Invalid GOG installer, the number of script line are much too small...\n");
-		return EXIT_FAILURE;
-	}
-	if (*o_size < 0)
-	{
-		fprintf(stderr,
-				"gogextract: Error opening file %s: No such file or directory\n",
-				path);
-		return EXIT_FAILURE;
-	}
-	fprintf(stdout, "Script lines: %ld\n", *o_size);
-	
-	fprintf(stdout, "Makeself script size: ");
-	fflush(stdout);
-	
-	*s_size = get_script_size(path, *o_size);
-	if (*s_size == -1)
-	{
-		// Impossible to be here but you never know
-		fprintf(stderr,
-				 ":gogextract:get_script_size: Problem with the line number\n");
-		return EXIT_FAILURE;
-	}
-	fprintf(stdout, "%ld\n", *s_size);
-	
-	fprintf(stdout, "MojoSetup archive size: ");
-	fflush(stdout);
-	*f_size = get_script_const(path, FILESIZES, strlen(FILESIZES));
-	if (*f_size == 0)
-	{
-		fprintf(stderr,
-				"gogextract: Invalid GOG installer, script size is much too small...\n");
-		return EXIT_FAILURE;
-	}
-	if (*f_size < 0)
-	{
-		fprintf(stderr,
-				"gogextract: Error opening file %s: No such file or directory\n",
-				path);
-		return EXIT_FAILURE;
-	}
-	fprintf(stdout, "%ld\n", *f_size);
-	
-	return EXIT_SUCCESS;
-}
-
-
+/*!
+ * @brief Retrieves a specific data from the string containing it
+ * @param path File path, can't be NULL
+ * @param str  String containing the desired data, can't be NULL
+ * @param size Data size
+ * @return The number of lines, -1 otherwise
+ **/
 int get_script_const(const char* path, const char* str, const int size)
 {
 	int   rslt;
@@ -123,6 +74,12 @@ int get_script_const(const char* path, const char* str, const int size)
 }
 
 
+/*!
+ * @brief Format the game title in the Unix style (without space and special chars)
+ * @param str Title game, can't be NULL
+ * @param ch  Replace the special chars with the following char (may be destined to disappear)
+ * @return
+ **/
 char* format_string(char* str, const char ch)
 {
 	unsigned long ix;
@@ -137,6 +94,132 @@ char* format_string(char* str, const char ch)
 	}
 	
 	return str;
+}
+
+
+/*!
+ * @brief Get the script size in bytes
+ * @param path  The file path, can't be NULL
+ * @param l_end The last line of the script
+ * @return The script size
+ **/
+long get_script_size(const char* path, const long l_end)
+{
+	FILE* stream;
+	long  ix;
+	long  size;
+	char  line[512];
+	
+	size = -1;
+	
+	if (l_end != 0)
+	{
+		// Can't open in binary mode
+		stream = fopen(path, "r");
+		if (NULL != stream)
+		{
+			ix = 1;
+			
+			while (fgets(line, sizeof(line), stream) != NULL)
+			{
+				if (ix == l_end)
+					size = ftell(stream);
+				
+				ix++;
+			}
+			
+			fclose(stream);
+		}
+	}
+	
+	return size;
+}
+
+
+void extract_bin(const char* src, const char* dest, const long pos)
+{
+	FILE* s_stream;
+	FILE* d_stream;
+	char  buffer[SIZE];
+	long  f_size;
+	long  cur;
+	
+	// FIXME Exceed disk size ?
+	d_stream = fopen(dest, "wb");
+	if (NULL != d_stream)
+	{
+		s_stream = fopen(src, "rb");
+		if (NULL != s_stream)
+		{
+			// Find the file size
+			fseek(s_stream, 0, SEEK_END);
+			f_size = ftell(s_stream);
+			
+			// Set the position in the source stream
+			fseek(s_stream, pos, SEEK_SET);
+			
+			// Prevention for not to go beyond the EOF
+			for (cur = ftell(s_stream);
+				 cur + SIZE < f_size;
+				 cur = ftell(s_stream))
+			{
+				fread(buffer, SIZE, 1, s_stream);
+				fwrite(buffer, SIZE, 1, d_stream);
+			}
+			
+			// Save the data rest
+			if (cur < f_size)
+			{
+				fread(buffer, f_size - cur, 1, s_stream);
+				fwrite(buffer, f_size - cur, 1, d_stream);
+			}
+			fclose(s_stream);
+			fclose(d_stream);
+		}
+	}
+}
+
+
+void extract_data(const char* src, const char* dest,
+					const long pos, const long size)
+{
+	FILE* s_stream;
+	FILE* d_stream;
+	char  buffer[SIZE];
+	long  r_bloc;
+	long  nmemb;
+	long  end;
+	
+	// Split max lenght
+	nmemb = size / SIZE;
+	end = pos + size;
+	
+	// FIXME Exceed disk size ?
+	d_stream = fopen(dest, "wb");
+	if (NULL != d_stream)
+	{
+		s_stream = fopen(src, "rb");
+		if (NULL != s_stream)
+		{
+			// Set the position in the source stream
+			fseek(s_stream, pos, SEEK_SET);
+			
+			for (r_bloc = 1; r_bloc <= nmemb; r_bloc++)
+			{
+				fread(buffer, SIZE, 1, s_stream);
+				fwrite(buffer, SIZE, 1, d_stream);
+			}
+			
+			if (ftell(s_stream) < end)
+			{
+				fread(buffer, size % SIZE, 1, s_stream);
+				fwrite(buffer, size % SIZE, 1, d_stream);
+			}
+			
+			fclose(s_stream);
+			fclose(d_stream);
+		}
+	}
 }
 
 
@@ -194,122 +277,58 @@ char* get_name_game(const char* path)
 }
 
 
-long get_script_size(const char* path, const long l_end)
+int init_const_installer(const char* path,
+						 long* o_size,
+						 long* s_size,
+						 long* f_size)
 {
-	FILE* stream;
-	long  ix;
-	long  size;
-	char  line[512];
-	
-	size = -1;
-	
-	if (l_end != 0)
+	*o_size = get_script_const(path, OFFSET, strlen(OFFSET));
+	if (*o_size == 0)
 	{
-		// Can't open in binary mode
-		stream = fopen(path, "r");
-		if (NULL != stream)
-		{
-			ix = 1;
-			
-			while (fgets(line, sizeof(line), stream) != NULL)
-			{
-				if (ix == l_end)
-					size = ftell(stream);
-				
-				ix++;
-			}
-			
-			fclose(stream);
-		}
+		fprintf(stderr,
+				"gogextract: Invalid GOG installer, the number of script line are much too small...\n");
+		return EXIT_FAILURE;
 	}
-	
-	return size;
-}
-
-
-void extract_data(const char* src, const char* dest,
-					const long pos, const long size)
-{
-	FILE* s_stream;
-	FILE* d_stream;
-	char  buffer[SIZE];
-	long  r_bloc;
-	long  nmemb;
-	long  end;
-	
-	// Split max lenght
-	nmemb = size / SIZE;
-	end = pos + size;
-	
-	// FIXME Exceed disk size ?
-	d_stream = fopen(dest, "wb");
-	if (NULL != d_stream)
+	if (*o_size < 0)
 	{
-		s_stream = fopen(src, "rb");
-		if (NULL != s_stream)
-		{
-			// Set the position in the source stream
-			fseek(s_stream, pos, SEEK_SET);
-			
-			for (r_bloc = 1; r_bloc <= nmemb; r_bloc++)
-			{
-				fread(buffer, SIZE, 1, s_stream);
-				fwrite(buffer, SIZE, 1, d_stream);
-			}
-			
-			if (ftell(s_stream) < end)
-			{
-				fread(buffer, size % SIZE, 1, s_stream);
-				fwrite(buffer, size % SIZE, 1, d_stream);
-			}
-			
-			fclose(s_stream);
-			fclose(d_stream);
-		}
+		fprintf(stderr,
+				"gogextract: Error opening file %s: No such file or directory\n",
+				path);
+		return EXIT_FAILURE;
 	}
-}
-
-
-void extract_bin(const char* src, const char* dest, const long pos)
-{
-	FILE* s_stream;
-	FILE* d_stream;
-	char  buffer[SIZE];
-	long  f_size;
-	long  cur;
+	fprintf(stdout, "Script lines: %ld\n", *o_size);
 	
-	// FIXME Exceed disk size ?
-	d_stream = fopen(dest, "wb");
-	if (NULL != d_stream)
+	fprintf(stdout, "Makeself script size: ");
+	fflush(stdout);
+	
+	*s_size = get_script_size(path, *o_size);
+	if (*s_size == -1)
 	{
-		s_stream = fopen(src, "rb");
-		if (NULL != s_stream)
-		{
-			// Find the file size
-			fseek(s_stream, 0, SEEK_END);
-			f_size = ftell(s_stream);
-			
-			// Set the position in the source stream
-			fseek(s_stream, pos, SEEK_SET);
-			
-			// Prevention for not to go beyond the EOF
-			for (cur = ftell(s_stream);
-				 cur + SIZE < f_size;
-				 cur = ftell(s_stream))
-			{
-				fread(buffer, SIZE, 1, s_stream);
-				fwrite(buffer, SIZE, 1, d_stream);
-			}
-			
-			// Save the data rest
-			if (cur < f_size)
-			{
-				fread(buffer, f_size - cur, 1, s_stream);
-				fwrite(buffer, f_size - cur, 1, d_stream);
-			}
-			fclose(s_stream);
-			fclose(d_stream);
-		}
+		// Impossible to be here but you never know
+		fprintf(stderr,
+				 ":gogextract:get_script_size: Problem with the line number\n");
+		return EXIT_FAILURE;
 	}
+	fprintf(stdout, "%ld\n", *s_size);
+	
+	fprintf(stdout, "MojoSetup archive size: ");
+	fflush(stdout);
+	*f_size = get_script_const(path, FILESIZES, strlen(FILESIZES));
+	if (*f_size == 0)
+	{
+		fprintf(stderr,
+				"gogextract: Invalid GOG installer, script size is much too small...\n");
+		return EXIT_FAILURE;
+	}
+	if (*f_size < 0)
+	{
+		fprintf(stderr,
+				"gogextract: Error opening file %s: No such file or directory\n",
+				path);
+		return EXIT_FAILURE;
+	}
+	fprintf(stdout, "%ld\n", *f_size);
+	
+	return EXIT_SUCCESS;
 }
 

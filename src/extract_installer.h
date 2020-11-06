@@ -24,51 +24,12 @@
 
 
 /*!
- * @brief Initializes the installer constants
- * @param path   File path source, can't be NULL
- * @param o_size Number of lines of the script unpacker.sh
- * @param s_size Makeself script size
- * @param f_size MojoSetup archive size
- * @return 0 if it is good, -1 otherwise
+ * @brief Extract the binary part (`data.zip`) of the GOG installer
+ * @param src  The file path source, can't be NULL
+ * @param dest The file path destination, can't be NULL
+ * @param pos  The begin position of the binary part in the GOG installer
  **/
-int init_const_installer(const char* path, long* o_size,
-						 long* s_size, long* f_size);
-
-
-/*!
- * @brief Retrieves a specific data from the string containing it
- * @param path File path, can't be NULL
- * @param str  String containing the desired data, can't be NULL
- * @param size Data size
- * @return The number of lines, -1 otherwise
- **/
-int get_script_const(const char* path, const char* str, const int size);
-
-
-/*!
- * @brief Format the game title in the Unix style (without space and special chars)
- * @param str Title game, can't be NULL
- * @param ch  Replace the special chars with the following char (may be destined to disappear)
- * @return
- **/
-char* format_string(char* str, const char ch);
-
-
-/*!
- * @brief Find the game title inside the script unpacker.sh
- * @param path The file path, can't be NULL
- * @return The game title
- **/
-char* get_name_game(const char* path);
-
-
-/*!
- * @brief Get the script size in bytes
- * @param path  The file path, can't be NULL
- * @param l_end The last line of the script
- * @return The script size
- **/
-long get_script_size(const char* path, const long l_end);
+void extract_bin(const char* src, const char* dest, const long pos);
 
 
 /*!
@@ -83,10 +44,21 @@ void extract_data(const char* src, const char* dest,
 
 
 /*!
- * @brief Extract the binary part (`data.zip`) of the GOG installer
- * @param src  The file path source, can't be NULL
- * @param dest The file path destination, can't be NULL
- * @param pos  The begin position of the binary part in the GOG installer
+ * @brief Find the game title inside the script unpacker.sh
+ * @param path The file path, can't be NULL
+ * @return The game title
  **/
-void extract_bin(const char* src, const char* dest, const long pos);
+char* get_name_game(const char* path);
+
+
+/*!
+ * @brief Initializes the installer constants
+ * @param path   File path source, can't be NULL
+ * @param o_size Number of lines of the script unpacker.sh
+ * @param s_size Makeself script size
+ * @param f_size MojoSetup archive size
+ * @return 0 if it is good, -1 otherwise
+ **/
+int init_const_installer(const char* path, long* o_size,
+						 long* s_size, long* f_size);
 
