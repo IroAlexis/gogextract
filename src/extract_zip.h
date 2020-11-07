@@ -20,10 +20,11 @@
 
 /*!
  * @brief Extract only the game since the archive
- * @param path Archive path
+ * @param f_zip Archive path
+ * @param dest  Extraction destination of the game
  * @return 0 if it is a success, -1 otherwise
  **/
-int extract_game_standalone(const char* path);
+int extract_game_standalone(const char* f_zip, const char* dest);
 
 
 /*!

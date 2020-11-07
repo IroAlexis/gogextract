@@ -64,7 +64,7 @@ int safe_create_dir(const char* dir, const int perm)
 }
 
 
-int extract_game_standalone(const char* path)
+int extract_game_standalone(const char* f_zip, const char* dest)
 {
 	zip_int64_t      ix;
 	zip_int64_t      len;
@@ -78,13 +78,14 @@ int extract_game_standalone(const char* path)
 	
 	int         perm;
 	char        buffer[SIZE];
-	const char* npath;
+	char*       tmp = NULL;
+	const char* p_index;
 	regex_t     preg;
 	
 	if (regcomp(&preg, "^data/noarch/.+", REG_EXTENDED))
 		return EXIT_FAILURE;
 	
-	stream = zip_open(path, ZIP_RDONLY, NULL);
+	stream = zip_open(f_zip, ZIP_RDONLY, NULL);
 	if (NULL == stream)
 		return EXIT_FAILURE;
 	
@@ -103,10 +104,17 @@ int extract_game_standalone(const char* path)
 			// Convert attibutes to unix permission
 			perm = attr_to_unix_perm(attributes);
 			
-			npath = z_stat.name + 12;
+			// Place the pointer on the file path where it is intresting for us
+			p_index = z_stat.name + 12;
+			
+			// Build the path for create the files and folders
+			tmp = (char*) calloc(sizeof(char), strlen(dest) + strlen(p_index) + 1);
+			tmp = strncat(tmp, dest, strlen(dest));
+			tmp = strncat(tmp, p_index, strlen(p_index) + 1);
+			fprintf(stderr, "=> %s\n", tmp);
 			
 			if (attributes & (1 << 30))
-				safe_create_dir(npath, perm);
+				safe_create_dir(tmp, perm);
 			else
 			{
 				// Open index archive (file)
@@ -117,12 +125,8 @@ int extract_game_standalone(const char* path)
 					return EXIT_FAILURE;
 				}
 				
-				// Place the pointer on the file path where it is intresting for us
-				npath = z_stat.name + 12;
-				//printf("%s\n", npath);
-				
 				// Create the uncompressed file
-				fd = open(npath, O_RDWR | O_TRUNC | O_CREAT, perm);
+				fd = open(tmp, O_RDWR | O_TRUNC | O_CREAT, perm);
 				if (fd < 0)
 				{
 					fprintf(stderr, "gogextract: error open file descriptor %s\n", z_stat.name);
@@ -144,6 +148,8 @@ int extract_game_standalone(const char* path)
 				close(fd);
 				zip_fclose(z_file);
 			}
+			
+			free(tmp);
 		}
 	}
 	

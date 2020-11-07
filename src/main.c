@@ -44,10 +44,10 @@ int main(int argc, char* argv[])
 	int   opt;
 	int   longindex;
 	int   flag;
-	long  f_size;
 	long  o_size;
 	long  s_size;
-	//char* file = NULL;
+	long  f_size;
+	char* d_game = NULL;
 	
 	if (argc < 2)
 	{
@@ -64,6 +64,8 @@ int main(int argc, char* argv[])
 		{
 			case 'g':
 				flag = 1;
+				d_game = (char*) calloc(strlen(optarg) + 1, sizeof(char));
+				strncpy(d_game, optarg, strlen(optarg) + 1);
 				break;
 			case 'v':
 				fprintf(stdout, "%s-0.1\n", argv[0]);
@@ -87,11 +89,18 @@ int main(int argc, char* argv[])
 			extract_data(argv[argc - 1], "./mojosetup.tar.gz", s_size, f_size);
 		}
 		
-		extract_bin(argv[argc - 1], "./data.zip", s_size + f_size);
-		
 		if (flag == 1)
-			extract_game_standalone("./data.zip");
+		{
+			extract_bin(argv[argc - 1], "./data.zip", s_size + f_size);
+		
+			if (d_game[strlen(d_game) - 1] != '/')
+				d_game = strncat(d_game, "/", strlen("/") + 1);
+
+			extract_game_standalone("./data.zip", d_game);
+		}
 	}
+	free(d_game);
+	
 	return EXIT_SUCCESS;
 }
 
