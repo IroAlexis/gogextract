@@ -79,7 +79,7 @@ int main(int argc, char* argv[])
 		}
 	}
 	
-	if (flag > 0)
+	if (flag >= 0)
 	{
 		init_const_installer(argv[argc - 1], &o_size, &s_size, &f_size);
 		
