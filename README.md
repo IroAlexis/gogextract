@@ -1,23 +1,27 @@
 # GOG Extract
 
-The [project] is developped by [@Yepoleb]. I'm rewriting it in the C language with the objective of not having memory leaks.
-
-Script for unpacking GOG Linux installers.
-
+The [project] is developped by [@Yepoleb] and it was a script for unpacking GOG Linux installers.
 Explanation of how it works is in his [blog post].
+
+I'm rewriting it in the C language with the objective of not having memory leaks and adding the new functionnalities
 
 ## Building GOG Extract
 ### Requirements:
 * [libzip] for the game standalone extraction
 
 ### Building:
-Inside the GOG Extract directory, run: `make` :frog:
+Inside the GOG Extract directory, just run: `make` :frog:
 
 ## Usage
+### Basic usage
+`gogextract gog_installer.sh`
 
-`gogextract <input file>`
+Extracts next files `unpacker.sh`, `mojosetup.tar.gz` and `data.zip`. The `data.zip` file contains the game data and others things the GOG Linux installer needs.
 
-Output files will be named `unpacker.sh`, `mojosetup.tar.gz` and `data.zip`.
+### Usage
+`gogextract -g /path/to/dir gog_installer.sh`
+
+Extracts only game data needs in `/path/to/dir`. You can just launch `/path/to/dir/start.sh` for enjoy the game.
 
 ## Roadmap
 * ArchLinux installation
