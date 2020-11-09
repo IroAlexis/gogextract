@@ -39,6 +39,28 @@ static struct option longopts[] =
 };
 
 
+void print_help()
+{
+	fprintf(stdout, "Usage: gogextract [OPTION...] FILE\n");
+	fprintf(stdout, " 'gogextract' unpacks GOG Linux installer or direct install the game\n");
+	fprintf(stdout, " without going through it\n\n");
+	fprintf(stdout, "Note: The GOG Linux installer is a '.sh' file contains 'unpacker.sh',\n");
+	fprintf(stdout, "'mojosetup.tar.gz' and 'data.zip'.\n\n");
+	fprintf(stdout, "Examples:\n");
+	fprintf(stdout, " gogextract gog_installer.sh         # Extract all files from gog_installer.sh\n");
+	fprintf(stdout, " gogextract -g . gog_installer.sh    # Install the game inside the current path\n\n");
+	fprintf(stdout, "Game standalone extraction:\n");
+	fprintf(stdout, "  -g, --game-standalone        install the game in the path passed in argument,\n");
+	fprintf(stdout, "                               if it exists\n");
+	fprintf(stdout, "  -d, --dir-game-standalone    create the folder game passed in argument if it\n");
+	fprintf(stdout, "                               doesn't exist and install the game in it (WIP)\n");
+	fprintf(stdout, "Others options:\n");
+	fprintf(stdout, "  -h, --help                   give this help list\n");
+	fprintf(stdout, "  -v, --version                print program version\n");
+	fprintf(stdout, "Mandatory arguments to long options are mandatory for short options too.\n");
+}
+
+
 int main(int argc, char* argv[])
 {
 	int   opt;
@@ -73,6 +95,7 @@ int main(int argc, char* argv[])
 				break;
 			case 'h':
 				flag = -1;
+				print_help();
 				break;
 			default:
 				flag = 0;
