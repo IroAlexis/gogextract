@@ -1,5 +1,5 @@
 NAME := ${notdir ${realpath .}}
-VERSION := 0.1
+VERSION := 0.2
 
 CC := gcc
 CFLAGS := -Wall -Wextra -pedantic

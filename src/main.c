@@ -90,7 +90,7 @@ int main(int argc, char* argv[])
 				strncpy(d_game, optarg, strlen(optarg) + 1);
 				break;
 			case 'v':
-				fprintf(stdout, "%s-0.1\n", argv[0]);
+				fprintf(stdout, "%s-0.2\n", argv[0]);
 				flag = -1;
 				break;
 			case 'h':
