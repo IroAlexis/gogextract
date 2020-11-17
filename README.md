@@ -7,6 +7,7 @@ I'm rewriting it in the C language with the objective of not having memory leaks
 
 ## Building GOG Extract
 ### Requirements:
+* [pkgconf] (*make*)
 * [libzip] for the game standalone extraction
 
 ### Building:
@@ -25,7 +26,6 @@ Extracts only game data needs in `/path/to/dir`. You can just launch `/path/to/d
 
 ## Roadmap
 * ArchLinux installation
-* Use Meson build system
 * Bad behavior with the name of some games
 
 ## Acknowledgements
@@ -40,6 +40,7 @@ Available in [LICENSE](LICENSE) file
 [@Yepoleb]: https://github.com/Yepoleb
 [project]: https://github.com/Yepoleb/gogextract 
 [blog post]: https://yepoleb.github.io/blog/2016/10/09/how-the-gog-linux-installers-work/
+[pkgconf]: https://git.sr.ht/~kaniini/pkgconf
 [libzip]: https://libzip.org/
 [@mobius]: https://github.com/mobius
 [simple example]: https://gist.github.com/mobius/1759816
