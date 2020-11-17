@@ -1,6 +1,7 @@
 /*
  * extract_zip.c
  * Copyright (C) 2020 Alexis Peypelut <peypeluta@live.fr>
+ *                    Thibault Peypelut <thibault.pey@gmail.com>
  *
  * gogextract is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -40,14 +41,8 @@
  **/
 int attr_to_unix_perm(const zip_uint32_t attributes)
 {
-	int ix;
-	int perm = (attributes & 1 << 24) ? 1 : 0;
-	
-	for (ix = 1; ix < 9; ix++)
-	{
-		perm <<= 1;
-		perm |= (attributes & 1 << (24 - ix)) ? 1 : 0;
-	}
+	int mask = (1 << 10) - 1;
+	int perm = (attributes & (mask << 16)) >> 16;
 	
 	return perm;
 }
@@ -113,6 +108,7 @@ int extract_game_standalone(const char* f_zip, const char* dest)
 			tmp = strncat(tmp, p_index, strlen(p_index) + 1);
 			fprintf(stderr, "=> %s\n", tmp);
 			
+			// Checks if the entry is a directory
 			if (attributes & (1 << 30))
 				safe_create_dir(tmp, perm);
 			else
