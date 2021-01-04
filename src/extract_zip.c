@@ -1,7 +1,7 @@
 /*
  * extract_zip.c
- * Copyright (C) 2020 Alexis Peypelut <peypeluta@live.fr>
- *                    Thibault Peypelut <thibault.pey@gmail.com>
+ * Copyright (C) 2020-2021 Alexis Peypelut <peypeluta@live.fr>
+ *                         Thibault Peypelut <thibault.pey@gmail.com>
  *
  * gogextract is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
