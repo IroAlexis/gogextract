@@ -29,7 +29,7 @@
  * @param dest The file path destination, can't be NULL
  * @param pos  The begin position of the binary part in the GOG installer
  **/
-void extract_bin(const char* src, const char* dest, const long pos);
+void  extract_bin          (const char* src, const char* dest, const long  pos);
 
 
 /*!
@@ -39,8 +39,7 @@ void extract_bin(const char* src, const char* dest, const long pos);
  * @param pos  The begin position inside GOG installer
  * @param size The size file that be extract
  **/
-void extract_data(const char* src, const char* dest,
-					const long pos, const long size);
+void  extract_data (const char* src, const char* dest, const long  pos, const long  size);
 
 
 /*!
@@ -48,7 +47,7 @@ void extract_data(const char* src, const char* dest,
  * @param path The file path, can't be NULL
  * @return The game title
  **/
-char* get_name_game(const char* path);
+char* get_name_game (const char* path);
 
 
 /*!
@@ -59,6 +58,5 @@ char* get_name_game(const char* path);
  * @param f_size MojoSetup archive size
  * @return 0 if it is good, -1 otherwise
  **/
-int init_const_installer(const char* path, long* o_size,
-						 long* s_size, long* f_size);
+int   init_const_installer (const char* path, long* o_size, long* s_size, long* f_size);
 

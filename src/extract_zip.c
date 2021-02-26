@@ -106,7 +106,7 @@ int extract_game_standalone(const char* f_zip, const char* dest)
 			tmp = (char*) calloc(sizeof(char), strlen(dest) + strlen(p_index) + 1);
 			tmp = strncat(tmp, dest, strlen(dest));
 			tmp = strncat(tmp, p_index, strlen(p_index) + 1);
-			fprintf(stderr, "=> %s\n", tmp);
+			fprintf(stderr, "[-] info:: %s\n", tmp);
 			
 			// Checks if the entry is a directory
 			if (attributes & (1 << 30))
@@ -117,7 +117,7 @@ int extract_game_standalone(const char* f_zip, const char* dest)
 				z_file = zip_fopen_index(stream, ix, 0);
 				if (!z_file)
 				{
-					fprintf(stderr, "gogextract: error zip open index\n");
+					fprintf(stderr, "[-] err:: Error zip open index\n");
 					return EXIT_FAILURE;
 				}
 				
@@ -125,7 +125,7 @@ int extract_game_standalone(const char* f_zip, const char* dest)
 				fd = open(tmp, O_RDWR | O_TRUNC | O_CREAT, perm);
 				if (fd < 0)
 				{
-					fprintf(stderr, "gogextract: error open file descriptor %s\n", z_stat.name);
+					fprintf(stderr, "[-] err:: Error open file descriptor %s\n", z_stat.name);
 					return EXIT_FAILURE;
 				}
 
@@ -135,7 +135,7 @@ int extract_game_standalone(const char* f_zip, const char* dest)
 					len = zip_fread(z_file, buffer, SIZE);
 					if (len < 0)
 					{
-						fprintf(stderr, "gogextract: error extract file\n");
+						fprintf(stderr, "[-] err:: Error extract file\n");
 						return EXIT_FAILURE;
 					}
 					write(fd, buffer, len);

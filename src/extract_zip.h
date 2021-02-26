@@ -24,7 +24,7 @@
  * @param dest  Extraction destination of the game
  * @return 0 if it is a success, -1 otherwise
  **/
-int extract_game_standalone(const char* f_zip, const char* dest);
+int extract_game_standalone (const char* f_zip, const char* dest);
 
 
 /*!
@@ -33,5 +33,5 @@ int extract_game_standalone(const char* f_zip, const char* dest);
  * @param perm Permission to be assigned
  * @return 0 if it is success, -1 otherwise
  **/
-int safe_create_dir(const char* dir, const int perm);
+int safe_create_dir (const char* dir, const int perm);
 

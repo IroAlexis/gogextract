@@ -52,8 +52,6 @@ void print_help()
 	fprintf(stdout, "Game standalone extraction:\n");
 	fprintf(stdout, "  -g, --game-standalone        install the game in the path passed in argument,\n");
 	fprintf(stdout, "                               if it exists\n");
-	fprintf(stdout, "  -d, --dir-game-standalone    create the folder game passed in argument if it\n");
-	fprintf(stdout, "                               doesn't exist and install the game in it (WIP)\n");
 	fprintf(stdout, "Others options:\n");
 	fprintf(stdout, "  -h, --help                   give this help list\n");
 	fprintf(stdout, "  -v, --version                print program version\n");
