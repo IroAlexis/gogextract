@@ -11,7 +11,11 @@ I'm rewriting it in the C language with the objective of not having memory leaks
 * [libzip] for the game standalone extraction
 
 ### Building:
-Inside the GOG Extract directory, just run: `make` :frog:
+Inside the GOG Extract directory, run:
+```shell
+$ make check
+$ make
+```
 
 ## Usage
 ### Basic usage

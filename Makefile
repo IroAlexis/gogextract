@@ -34,28 +34,28 @@ CC := gcc
 CFLAGS := -Wall -Wextra -pedantic ${shell ${PKGCONF} --cflags ${PKG}}
 LDFLAGS := ${shell ${PKGCONF} --libs ${PKG}}
 
-all: check depends binary
+all: binary
 
-binary: check depends ${BIN}
+binary: objects ${BIN}
 
-objects: check depends ${OBJ}
+objects: depends ${OBJ}
 
-depends: check ${DEP}
+depends: ${DEP}
 
 check: ${addsuffix ${PKG_SUFFIX},${PKG}}
 
 ${BIN}: ${OBJ}
-	@${ECHO} "Link: $@"
+	@${ECHO} "[-] info:: Link: $@"
 	${MKDIR} ${@D}
 	${CC} -o $@ ${LDFLAGS} $^
 
 ${OBJ_PREFIX}%${OBJ_SUFFIX}: ${SRC_PREFIX}%${SRC_SUFFIX}
-	@${ECHO} "Generate: $*"
+	@${ECHO} "[-] info:: Generate: $*"
 	${MKDIR} ${@D}
 	${CC} -o $@ ${CFLAGS} -c $<
 
 ${DEP_PREFIX}%${DEP_SUFFIX}: ${SRC_PREFIX}%${SRC_SUFFIX}
-	@${ECHO} "Dependance: $*"
+	@${ECHO} "[-] info:: Dependance: $*"
 	${MKDIR} ${@D}
 	${CC} -o $@ ${CFLAGS} -MM -MT ${OBJ_PREFIX}$*${OBJ_SUFFIX} $<
 
@@ -65,9 +65,9 @@ ${DEP_PREFIX}%${DEP_SUFFIX}: ${SRC_PREFIX}%${SRC_SUFFIX}
 
 clean:
 	${RMDIR} ${OBJ_PREFIX}
+	${RMDIR} ${DEP_PREFIX}
 
 distclean mrproper: clean
-	${RMDIR} ${DEP_PREFIX}
 	${RM} ${BIN}
 	${RM} *${TAR_SUFFIX}
 
