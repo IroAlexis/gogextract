@@ -26,7 +26,7 @@
 #include "extract_zip.h"
 
 #define NAME_DIR "game"
-#define MODE_DIR 0755
+#define MODE_DIR 0777
 
 
 static struct option longopts[] =
